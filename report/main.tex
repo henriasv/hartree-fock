@@ -8,6 +8,7 @@
 \newcommand{\Rvec}{\mathbf{R}}
 \newcommand{\xvec}{\mathbf{x}}
 \newcommand{\dd}{\mathrm{d}}
+\newcommand{\Pvec}{\mathbf{P}}
 
 %opening
 \title{Project - FYS4411}
@@ -42,5 +43,17 @@ The Hartree equation in atomic units:
 
 Note that $\xvec' = (\rvec', s')$, so that $\int \dd x' = \sum_{s'} \int \dd \rvec'$.
 
+The last term on the left side is called the \emph{Hartree potential}. 
+
+\subsection{The Slater determinant}
+Since electrons are indistinguishable, the Hamiltonian commites with the particle-exchange operator $P_{ij}$:
+\begin{equation}
+	\Pvec_{ij}\Psi(\xvec_1, \xvec_2, ..., \xvec_i, ..., \xvec_j, ... \xvec_N) = \Psi(\xvec_1, \xvec_2, ..., \xvec_j, ..., \xvec_i, ... \xvec_N)
+\end{equation}
+
+The eigenvalue of $P$ is $-1$ (experimental) for fermions. We are working with an independent-particle Hamiltonian, so the electron state can be written as a product of single-electron states:
+\begin{equation}
+	\Psi(\xvec_1, ..., \xvec_N) = \psi_1(\xvec_1)\cdots\psi_N(\xvec_N)
+\end{equation}
 
 \end{document}
