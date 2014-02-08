@@ -1,0 +1,46 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{caption}
+
+\newcommand{\rvec}{\mathbf{r}}
+\newcommand{\Rvec}{\mathbf{R}}
+\newcommand{\xvec}{\mathbf{x}}
+\newcommand{\dd}{\mathrm{d}}
+
+%opening
+\title{Project - FYS4411}
+\author{Henrik Andersen Sveinsson}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{The Hartree-Fock method}
+
+\subsection{Approximations}
+There are five main approximations in the Hartree-Fock method:
+\begin{itemize}
+ \item The Born-Oppenheimer approximation
+ \item Relativistic effects are neglected
+ \item The solution is a linear combination of (typically orthogonal) basis functions
+ \item Each energy eigenfunction is assumed to be describable by a single Slater determinant
+ \item The mean field approximation is implied. 
+\end{itemize}
+
+The Hartree equation in atomic units:
+\begin{equation}
+ \left[ -\frac{1}{2}\nabla^2 -\sum_n \frac{Z_n}{|\rvec -\Rvec_n|} + 
+ \sum_{l=1}^N \int \dd x' |\psi_l(\xvec)|^2 \frac{1}{|\rvec -\rvec'|}\right] \psi_k(\xvec) 
+ = E' \psi_k (\xvec)
+\end{equation}
+
+Note that $\xvec' = (\rvec', s')$, so that $\int \dd x' = \sum_{s'} \int \dd \rvec'$.
+
+
+\end{document}
