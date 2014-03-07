@@ -3,12 +3,15 @@
 
 \usepackage{amsmath}
 \usepackage{caption}
+\usepackage[toc,page]{appendix}
+
 
 \newcommand{\rvec}{\mathbf{r}}
 \newcommand{\Rvec}{\mathbf{R}}
 \newcommand{\xvec}{\mathbf{x}}
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\Pvec}{\mathbf{P}}
+\newcommand{\mb}{\mathbf}
 
 %opening
 \title{Project - FYS4411}
@@ -21,6 +24,9 @@
 \begin{abstract}
 
 \end{abstract}
+
+\section{Introduction}
+The goal of this project is to perform Hartree-Fock computations in order to find an optimal basis for the single particle wave-functions for Helium, Beryllium and Neon.
 
 \section{The Hartree-Fock method}
 
@@ -45,8 +51,13 @@ Note that $\xvec' = (\rvec', s')$, so that $\int \dd x' = \sum_{s'} \int \dd \rv
 
 The last term on the left side is called the \emph{Hartree potential}. 
 
+The Hartree-Fock functional in our case reads:
+\begin{equation}
+	E[\Phi] = \sum_{\mu = 1}^N \langle \mu |h|\mu \rangle + \frac{1}{2} \sum_{\mu = 1}^N\sum_{\nu=1}^N \left[ \langle \mu\nu |\frac{1}{r_{ij}}| \mu\nu\rangle - \langle \mu\nu |\frac{1}{r_{ij}}| \nu\mu\rangle \right]
+\end{equation}
+
 \subsection{The Slater determinant}
-Since electrons are indistinguishable, the Hamiltonian commites with the particle-exchange operator $P_{ij}$:
+Since electrons are indistinguishable, the Hamiltonian commutes with the particle-exchange operator $P_{ij}$:
 \begin{equation}
 	\Pvec_{ij}\Psi(\xvec_1, \xvec_2, ..., \xvec_i, ..., \xvec_j, ... \xvec_N) = \Psi(\xvec_1, \xvec_2, ..., \xvec_j, ..., \xvec_i, ... \xvec_N)
 \end{equation}
@@ -56,4 +67,78 @@ The eigenvalue of $P$ is $-1$ (experimental) for fermions. We are working with a
 	\Psi(\xvec_1, ..., \xvec_N) = \psi_1(\xvec_1)\cdots\psi_N(\xvec_N)
 \end{equation}
 
+Many-electron states are required to be antisymmetrical with respect to the particle exchange. We assume the many-body elevtronic state to take form of an anti-symmetrized sum of permutations of the single-particle wave function. 
+
+\begin{equation}
+	\Psi_{AS} (\xvec_1, ..., \xvec_N) = \frac{1}{\sqrt{N!}} \sum_\mb{P} \epsilon_P \mb{P} \psi_1(\xvec_1) \cdots \psi_N(\xvec_N)
+\end{equation}
+
+This is known as a slater determinant.
+
+\section{Bases and transformations}
+We start out by using spin-orbitals $\psi_k$ as a basis for our approximation to the many-body electronic wave function. We assume the basis functions are orthonormal, i.e. $\langle \psi_i, \psi_j \rangle = \delta_{ij}$. We can construct a new basis of spin-orbitals by applying a unitary transformation, given by a unitary matrix $\mb{C}$. Since unitary matrices preserve inner products, then the orthonormality property of tha basis is preserved through the unitary transformation. 
+
+
+Let us then look at the relation between the slater determinant of $\{ \psi\}$ and that of $\{\psi'\}$:
+We start by defining a matrix $\mb{M}$ as
+\begin{equation}
+	M_{ij} =\frac{1}{\sqrt{N!}} \psi_j(\xvec_i)
+\end{equation}
+
+We want to show that the Slater determinant constructed from the spin orbitals $\{\psi'\}$ can be written as the determinant of the matrix product $\mb{C}\mb{M}$. Remember $\det(AB) = \det(BA) = \det(BA^T)$, so we can work with $\mb{M}'=\mb{M}\mb{C^T}$.
+
+If we write out this product, we find:
+\begin{equation}
+	(MC^T)_{ij} = \sum_{k} M_{ik} C_{jk}
+\end{equation}
+\begin{equation}
+	= \sum_{k}\frac{1}{\sqrt{N!}}C_{jk}\psi_k(\xvec_i)
+\end{equation}
+
+We originally assumed $C$ to be taking $\{ \psi\}$ to $\{\psi'\}$, so:
+\begin{equation}
+	\psi_k' = \sum_{l=1}^N C_{kl} \psi_l
+	\label{eq:basis_change}
+\end{equation}
+Which means
+\begin{equation}
+(MC^T)_{ij} = \frac{1}{\sqrt{N!}} \psi_j'(x_i)
+\end{equation}
+The determinant of this matrix will be the same as the Slater determinant constructed from the new basis $\{\psi'\}$.
+
+Now we want to find the relation between $\det{M}$ and $\det{M'}$. They are different by a factor of $\det{C^T} = \det{C}$. Since $C$ is unitary, $|\det C| = 1$.
+
+\section{Minimizing the Hartree-Fock functional}
+We will apply some sort of variational scheme to the Hartree-Fock functional in order to find an optimal basis $\{\psi'\}$ for the single-particle wave functions. We remeber the unitary basis-change matrix C. 
+We now write the Hartree-Fock functional in terms of the new basis obtained from equation \ref{eq:basis_change}. We represent this new basis with latin letters, whereas the old basis is represented by greek letters. 
+\begin{equation}
+	E[\Psi] = \sum_{a=1}^N \langle a|h|a \rangle + \frac{1}{2} \sum_{ab}\left[  \langle ab |\frac{1}{r_{ij}}|ab \rangle - \langle ab | \frac{1}{r_{ij} }| ba\rangle \right]
+\end{equation}
+
+We now expand all these basis functions in the old basis:
+
+\begin{align}
+	E[\Psi] &= \sum_{a=1}^N \sum_\alpha \sum_\beta C_{a\alpha}^* C_{a\beta}\langle \alpha |h|\beta\rangle
+	\nonumber \\
+	&+
+	\frac{1}{2} \sum_a \sum_b \sum_\alpha \sum_\beta \sum_\gamma \sum_\delta 
+	C^*_{a\alpha} C^*_{b\beta} C_{a\gamma} C_{b\delta}
+	\left[  \langle \alpha\beta |\frac{1}{r_{ij}}|\gamma\delta \rangle - \langle \alpha\beta | \frac{1}{r_{ij} }| \delta\gamma \rangle \right]
+\end{align}
+
+We then apply orthogonality:
+
+\begin{equation}
+	E[\Psi] = 
+\end{equation}
+
+
+\begin{appendices}
+\section{Terms}
+\subsection{Unitary transformation}
+A unitary transformation is a transformation that preserves the inner product of two vectors. A unitary matrix has the property $U^*U = I$. 
+
+
+
+\end{appendices}
 \end{document}
