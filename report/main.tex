@@ -126,10 +126,18 @@ We now expand all these basis functions in the old basis:
 	\left[  \langle \alpha\beta |\frac{1}{r_{ij}}|\gamma\delta \rangle - \langle \alpha\beta | \frac{1}{r_{ij} }| \delta\gamma \rangle \right]
 \end{align}
 
-We then apply orthogonality:
-
+For some reason this takes us to:
 \begin{equation}
-	E[\Psi] = 
+	\sum_\gamma^N h_{\alpha\gamma}^{HF} C_{k\gamma} = \epsilon_k C_{k\alpha}
+\end{equation}
+
+where 
+\begin{equation}
+	h_{a\gamma}^{HF} = \langle \alpha |h|\gamma\rangle + \frac{1}{2}\sum_a\sum_\beta\sum_\delta  C^*_{a\beta}C_{a\delta} \left[ 
+	\langle\alpha \beta|\frac{1}{r_{ij}}| \gamma \delta \rangle
+	-
+	\langle\alpha \beta|\frac{1}{r_{ij}}| \delta \gamma \rangle
+	\right]
 \end{equation}
 
 
