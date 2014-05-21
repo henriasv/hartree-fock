@@ -1,26 +1,28 @@
 #include "boysfunction.h"
 
-BoysFunction::BoysFunction(int angMomMax)
+BoysFunction::BoysFunction()
 {
-    nMax = 4*angMomMax;
-    F = arma::zeros<arma::vec>(nMax+1);
+    m_nMax = 0;
     Ftabulated.load("../../data/boys_tabulated.dat"); // This file must be in ../data/
 }
 
-void BoysFunction::setx(double x)
+void BoysFunction::set(double x, int nMax)
 {
+    m_nMax = nMax;
+    F = arma::zeros(m_nMax+1);
+
     if (x<=50)
     {
-        F(nMax) = tabulated(nMax, x);
+        F(m_nMax) = tabulated(m_nMax, x);
     }
     else
     {
-        F(nMax) = asymptotic(nMax, x);
+        F(m_nMax) = asymptotic(m_nMax, x);
     }
 
     double ex = exp(-x);
 
-    for (int n = nMax; n>0; n--)
+    for (int n = m_nMax; n>0; n--)
     {
         F(n-1) = (2*x*F(n)+ex)/(2*n-1);
     }
@@ -29,6 +31,11 @@ void BoysFunction::setx(double x)
 double BoysFunction::returnValue(int n)
 {
     return F(n);
+}
+
+double BoysFunction::nMax()
+{
+    return m_nMax;
 }
 
 double BoysFunction::tabulated(int n, double x)

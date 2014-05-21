@@ -84,6 +84,38 @@ double Integrator::overlapIntegral_dim(int dim, int iA, int iB, Primitive &A, Pr
     return E(dim)(iA, iB, 0)*pow(PI/p, 0.5);
 }
 
+double Integrator::nuclearElectronIntegral(Primitive &A, Primitive &B, arma::vec nuc_pos)
+{
+    int i = A.xExponent();
+    int j = B.xExponent();
+    int k = A.yExponent();
+    int l = B.yExponent();
+    int m = A.zExponent();
+    int n = B.zExponent();
+
+    double a = A.exponent();
+    double b = B.exponent();
+    double p = a+b;
+
+    int tMax = i+j;
+    int uMax = k+l;
+    int vMax = m+n;
+
+    setupHermiteIntegrals(a, b, A.nucleusPosition(), B.nucleusPosition(), nuc_pos, i, j, k, l, m, n);
+    setupE(A, B);
+
+    double integral = 0;
+    for (int t = 0; t<tMax+1; t++) {
+        for (int u = 0; u<uMax+1; u++) {
+            for (int v = 0; v<vMax+1; v++) {
+                integral += E(0)(i, j, t)*E(1)(k, l, u)*E(2)(m, n, v)*R(0)(t, u, v);
+            }
+        }
+    }
+    integral *= 2*PI/p;
+    return integral;
+}
+
 void Integrator::setupE(const Primitive &A, const Primitive &B)
 {
     //E = arma::field<arma::cube>(3);
@@ -186,5 +218,66 @@ bool Integrator::checkIndexCombinationForE(int iA, int iB, int t)
     else
     {
         return true;
+    }
+}
+
+void Integrator::setupHermiteIntegrals(double a, double b, const arma::vec &A_pos, const arma::vec &B_pos, const arma::vec nuc_pos, int iA, int iB, int jA, int jB, int kA, int kB)
+{
+    int tMax = iA+iB;
+    int uMax = jA+jB;
+    int vMax = kA+kB;
+    int nMax = tMax+uMax+vMax+1;
+
+    int subMax = std::max(tMax, std::max(uMax, vMax));
+
+    double p = a+b;
+
+    arma::vec P = (a*A_pos + b*B_pos)/p;
+    arma::vec PC = P-nuc_pos;
+
+    boys.set(p*arma::dot(PC, PC), nMax);
+
+    R.set_size(nMax+1);
+    for (int i = 0; i<nMax+1; i++) {
+        R(i) = arma::zeros(subMax+1, subMax+1, subMax+1);
+    }
+
+    // Setup R_000N
+    for (int n = 0; n<nMax+1; n++)
+    {
+        R(n)(0, 0, 0) = pow(-2*p, n)*boys.returnValue(n);
+    }
+
+    for (int tuvSum = 1; tuvSum<nMax; tuvSum ++) {
+        for (int n = 0; n<nMax-tuvSum; n++) {
+            for (int t = 0; t<subMax+1; t++) {
+                for (int u = 0; u<subMax+1; u++) {
+                    for (int v = 0; v<subMax+1; v++) {
+                        // Check if this combination is available now:
+                        if (t+u+v != tuvSum || t+u+v == 0) {
+                            continue;
+                        }
+                        // The largest element of t, u, v is the one that can absorb subtraction! There are several ways to the elements of R, but the one here should work.
+                        int largestElement = std::max(t,std::max(u, v));
+                        if (largestElement == t) {
+                            R(n)(t, u, v) = PC(0)*R(n+1)(t-1, u, v);
+                            if (t>=2)
+                                R(n)(t,u,v) += (t-1)*R(n+1)(t-2, u,v);
+                        }
+                        else if (largestElement == u) {
+                            R(n)(t, u, v) = PC(1)*R(n+1)(t, u-1, v);
+                            if(u>=2)
+                                R(n)(t,u,v) += (u-1)*R(n+1)(t, u-2, v);
+                        }
+                        else {
+                            R(n)(t, u, v) = PC(2)*R(n+1)(t, u, v-1);
+                            if (v>=2)
+                                R(n)(t,u,v) += (v-1)*R(n+1)(t, u, v-2);
+
+                        }
+                    }
+                }
+            }
+        }
     }
 }
