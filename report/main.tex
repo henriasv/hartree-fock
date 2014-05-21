@@ -128,7 +128,7 @@ We now expand all these basis functions in the old basis:
 	\nonumber \\
 	&+
 	\frac{1}{2} \sum_a \sum_b \sum_\alpha \sum_\beta \sum_\gamma \sum_\delta 
-	C^*_{a\alpha} C^*_{b\beta} C_{a\gamma} C_{b\delta} \\
+	C^*_{a\alpha} C^*_{b\beta} C_{a\gamma} C_{b\delta} \nonumber \\
 	&\left[  \langle \alpha\beta |\frac{1}{r_{ij}}|\gamma\delta \rangle - \langle \alpha\beta | \frac{1}{r_{ij} }| \delta\gamma \rangle \right]
 \end{align}
 
@@ -216,7 +216,18 @@ Hermite integrals of negative indices are taken to be zero.
 From looking at the recurrence relations, one sees that there are several sources $(t', u', v', n')$ for finding a particlular integral $R_{tuv}^{n}$
 
 \subsection{Two-electron repulsion integrals (Coulomb)}arma::vec F;
+Evaluation of electron-electron repulsion integrals are very similar to the electron-nucleus integral evaluation.
 
+The integral is on the form:
+\begin{equation}
+	V_{abcd} = \sandwich{G_a(\rvec_{1A})G_b(\rvec_{1B})}{r_{12}^{-1}}{G_c(\rvec_{2C})G_d(\rvec_{2D})}
+\end{equation}
+Using a similar strategy to the one for electron-nucleus-integration, one ends up with:
+\begin{align}
+	V_{abcd} = \frac{2*\pi^{5/2}}{pq\sqrt{p+q}} \sum_{tuv}E_{tuv}^{ab}\sum_{\tau\nu\phi}E_{\tau\nu\phi}^{cd} \nonumber\\
+	(-1)^{\tau+\nu+\phi}R_{t+\tau, u+\nu, v+\phi}(\alpha, \mb{R}_{PQ})
+\end{align}
+Two different sets of Hermite coefficients are now needed. in addition, the argument to the boys function has changed. The distance, is between the centers of each pair of primitive gaussians, and the parameter $\alpha = \frac{pq}{p+q}$. $p = a+b$ and $q = c+d$.
 
 \begin{appendices}
 \section{Terms}
