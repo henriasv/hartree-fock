@@ -1,14 +1,17 @@
 #include <iostream>
-#include "electronicsystem.h"
-#include "berylliumhf.h"
-#include "hartreefocksolver.h"
-
+#include <electronicsystem.h>
+#include <berylliumhf.h>
+#include <hartreefocksolver.h>
+#include <unittest++/UnitTest++.h>
+#include <primitive.h>
+#include <integrator.h>
 using namespace std;
 
 int main()
 {
+
     // Choose system
-    int n = 2;
+    int n = 4;
     int numElectrons = n;
     int nuclearCharge = n;
     int numBasisFunctions = 4;
@@ -17,8 +20,9 @@ int main()
     HartreeFockSolver solver = HartreeFockSolver(system);
     // Solve
     solver.solve(10);
-    // Print results
+    // Print resultsx
 
     return 0;
 }
+
 

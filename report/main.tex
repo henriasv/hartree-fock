@@ -1,10 +1,10 @@
-\documentclass[a4paper,10pt]{article}
+\documentclass[a4paper,10pt, twocolumn]{article}
 \usepackage[utf8]{inputenc}
 
 \usepackage{amsmath}
 \usepackage{caption}
 \usepackage[toc,page]{appendix}
-
+\bibliographystyle{naturemag}
 
 \newcommand{\rvec}{\mathbf{r}}
 \newcommand{\Rvec}{\mathbf{R}}
@@ -12,6 +12,7 @@
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\Pvec}{\mathbf{P}}
 \newcommand{\mb}{\mathbf}
+\newcommand{\overlap}[2]{\langle {#1}|{#2} \rangle}
 
 %opening
 \title{Project - FYS4411}
@@ -25,9 +26,12 @@
 
 \end{abstract}
 
-\section{Introduction}
+\part{Introduction}
 The goal of this project is to perform Hartree-Fock computations in order to find an optimal basis for the single particle wave-functions for Helium, Beryllium and Neon.
 
+%%%%%%%%%%%%%%%%%%%%%%%
+\part{Theory}
+%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Hartree-Fock method}
 
 \subsection{Approximations}
@@ -140,13 +144,42 @@ where
 	\right]
 \end{equation}
 
+\section{Cartesian GTO's}
+Cartesian Gaussians are on the form:
+\begin{equation}
+	G_a = G_{ikm}(a, \rvec_A) = x^i_A y^k_A z^m_A e^{-ar^2_A}
+\end{equation}
+Where $r_A = |\rvec_A|$ is the distance to the origin of the Gaussian.
+
+\section{Integral evaluations}
+\subsection{Overlap integrals}
+
+The overlap integrals $S_{ab} = \overlap{G_a}{G_b}$ are:
+\begin{equation}
+	S_{ab} = E_0^{ij}E_0^{kl}E_0^{mn}\left(\frac{\pi}{p}\right)^{\frac{3}{2}}
+\end{equation}
+Where $E_t^{ij}$ are Hermite coefficients. 
+The Hermite coefficients can be found using recurrence relations. 
+\begin{equation}
+	E_0^{00} = e^{-\frac{q}{p}X_{AB}^2}
+\end{equation}
+We also know that $E_{t<0} = 0$ and $E_{t>i+j} = 0$
+Where $p = a+b$ and $q = \frac{ab}{a+b}$.
+Now, the recurrence relations are:
+\begin{equation}
+	E_t^{i+1,j} = \frac{1}{2p}E_{t-1}^{ij} + X_{PA}E_t^{ij} + (t+1) E_{t+1}^{ij}
+\end{equation}
+\begin{equation}
+	E_t^{i, j+1} = \frac{1}{2p}E_{t-1}^{ij}+X_{PB}E_t^{ij} + (t+1)E_{t+1}^{ij}
+\end{equation}
 
 \begin{appendices}
 \section{Terms}
 \subsection{Unitary transformation}
 A unitary transformation is a transformation that preserves the inner product of two vectors. A unitary matrix has the property $U^*U = I$. 
 
-
-
 \end{appendices}
+
+
+\bibliography{mendeleybib}
 \end{document}
