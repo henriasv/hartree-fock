@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt, twocolumn]{article}
+\documentclass[a4paper,10pt, twocolumn, pre]{revtex4}
 \usepackage[utf8]{inputenc}
 
 \usepackage{amsmath}
@@ -16,16 +16,17 @@
 \newcommand{\sandwich}[3]{\langle {#1}|{#2}|{#3}\rangle}
 
 %opening
-\title{Project - FYS4411}
-\author{Henrik Andersen Sveinsson}
 
 \begin{document}
-
-\maketitle
+\title{Project - FYS4411}
+\author{Henrik Andersen Sveinsson}
+\date{\today}
 
 \begin{abstract}
-
+We apply the restricted Hartree-Fock method (RHF) to several atomic and molecular systems.
 \end{abstract}
+\maketitle
+
 
 \part{Introduction}
 The goal of this project is to perform Hartree-Fock computations in order to find an optimal basis for the single particle wave-functions for Helium, Beryllium and Neon.
@@ -127,8 +128,8 @@ We now expand all these basis functions in the old basis:
 	\nonumber \\
 	&+
 	\frac{1}{2} \sum_a \sum_b \sum_\alpha \sum_\beta \sum_\gamma \sum_\delta 
-	C^*_{a\alpha} C^*_{b\beta} C_{a\gamma} C_{b\delta}
-	\left[  \langle \alpha\beta |\frac{1}{r_{ij}}|\gamma\delta \rangle - \langle \alpha\beta | \frac{1}{r_{ij} }| \delta\gamma \rangle \right]
+	C^*_{a\alpha} C^*_{b\beta} C_{a\gamma} C_{b\delta} \\
+	&\left[  \langle \alpha\beta |\frac{1}{r_{ij}}|\gamma\delta \rangle - \langle \alpha\beta | \frac{1}{r_{ij} }| \delta\gamma \rangle \right]
 \end{align}
 
 For some reason this takes us to:
@@ -138,7 +139,7 @@ For some reason this takes us to:
 
 where 
 \begin{equation}
-	h_{a\gamma}^{HF} = \langle \alpha |h|\gamma\rangle + \frac{1}{2}\sum_a\sum_\beta\sum_\delta  C^*_{a\beta}C_{a\delta} \left[ 
+	h_{a\gamma}^{HF} = \langle \alpha |h|\gamma\rangle + \frac{1}{2}\sum_{a \beta \delta}  C^*_{a\beta}C_{a\delta} \left[ 
 	\langle\alpha \beta|\frac{1}{r_{ij}}| \gamma \delta \rangle
 	-
 	\langle\alpha \beta|\frac{1}{r_{ij}}| \delta \gamma \rangle
@@ -191,6 +192,26 @@ Rewriting in terms of hermite gaussians, we are able to separate this integral i
 \begin{equation}
 	V_{ab} = \sum_{t=0}^{i+j}E_{t}^{ij}\sum_{u=0}^{k+l}E_{u}^{kl}\sum_{v=0}^{m+n}E_{v}^{mn} \int \frac{\Lambda_{tuv}(\rvec_P)}{r_C} \dd \rvec
 \end{equation}
+
+The Hermite integral can be solved in terms of a boys functions $F_n(x)$ and recurrence relations, so that:
+\begin{equation}
+	V_{ab} = \frac{2\pi}{p}\sum_{tuv} E_{tuv}^{ab} R_{tuv}(p, \mb{R}_{PC})
+\end{equation}
+To find the $R$'s, we need \emph{Auxillary Hermite integrals} $R_{tuv}^n$, because they provide sufficient recursion relations to find the $R_{tuv}^0$'s that we are interested in.
+
+The relevant recurrence relations for these integrals are:
+\begin{align}
+R_{t+1, u, v}^n = tR_{t-1, u, v}^{n+1} + A_xR_{tuv}^{n+1} \\
+R_{t, u+1, v}^n = uR_{t, u-1, v}^{n+1} + A_yR_{tuv}^{n+1} \\
+R_{t, u, v+1}^n = vR_{t, u, v-1}^{n+1} + A_zR_{tuv}^{n+1}
+\end{align}
+Where $A_i$ is the $i$'th component of $\mb{R}_{PC}$.
+
+We also have some initial information:
+\begin{equation}
+	R_{000}^n = (-2a)F_n(aA^2)
+\end{equation}
+Hermite integrals of negative indices are taken to be zero.
 
 \subsection{Two-electron repulsion integrals (Coulomb)}
 

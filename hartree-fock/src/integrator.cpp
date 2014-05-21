@@ -102,7 +102,7 @@ void Integrator::setupE(const Primitive &A, const Primitive &B)
     setupE(A.exponent(), B.exponent(), A.nucleusPosition(), B.nucleusPosition(), i, j, k, l, m, n);
 }
 
-void Integrator::setupE(double a, double b, arma::vec A_pos, arma::vec B_pos, int i, int j, int k, int l, int m, int n)
+void Integrator::setupE(double a, double b, const arma::vec& A_pos, const arma::vec& B_pos, int i, int j, int k, int l, int m, int n)
 {
     int maxiA[3];
     int maxiB[3];
