@@ -17,7 +17,8 @@ SOURCES += \
     hartreefocksolver.cpp \
     electronicsystem.cpp \
     berylliumhf.cpp \
-    atomicorbitals.cpp
+    atomicorbitals.cpp \
+    boysfunction.cpp
 
 HEADERS += \
     primitive.h \
@@ -25,7 +26,8 @@ HEADERS += \
     hartreefocksolver.h \
     electronicsystem.h \
     berylliumhf.h \
-    atomicorbitals.h
+    atomicorbitals.h \
+    boysfunction.h
 
 OTHER_FILES +=
 

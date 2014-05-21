@@ -13,6 +13,7 @@
 \newcommand{\Pvec}{\mathbf{P}}
 \newcommand{\mb}{\mathbf}
 \newcommand{\overlap}[2]{\langle {#1}|{#2} \rangle}
+\newcommand{\sandwich}[3]{\langle {#1}|{#2}|{#3}\rangle}
 
 %opening
 \title{Project - FYS4411}
@@ -153,7 +154,6 @@ Where $r_A = |\rvec_A|$ is the distance to the origin of the Gaussian.
 
 \section{Integral evaluations}
 \subsection{Overlap integrals}
-
 The overlap integrals $S_{ab} = \overlap{G_a}{G_b}$ are:
 \begin{equation}
 	S_{ab} = E_0^{ij}E_0^{kl}E_0^{mn}\left(\frac{\pi}{p}\right)^{\frac{3}{2}}
@@ -172,6 +172,29 @@ Now, the recurrence relations are:
 \begin{equation}
 	E_t^{i, j+1} = \frac{1}{2p}E_{t-1}^{ij}+X_{PB}E_t^{ij} + (t+1)E_{t+1}^{ij}
 \end{equation}
+
+\subsection{Kinetic integrals}
+
+Kinetic integrals are products of overlap integrals with some exponents changed.
+
+\subsection{One-electron nuclear attraction integrals (Coulomb)}
+The general form of these integrals are:
+\begin{equation}
+	V_{ab} = \sandwich{G_a(\rvec_A)}{\frac{1}{r_C}}{G_b(\rvec_B)}
+\end{equation}
+
+We know that this integral can be written:
+\begin{equation}
+	V_{ab} = \int \frac{\Omega_{ab}}{r}\dd \rvec  
+\end{equation}
+Rewriting in terms of hermite gaussians, we are able to separate this integral into a sum of products of hermite coefficients and one-center hermite integrals:
+\begin{equation}
+	V_{ab} = \sum_{t=0}^{i+j}E_{t}^{ij}\sum_{u=0}^{k+l}E_{u}^{kl}\sum_{v=0}^{m+n}E_{v}^{mn} \int \frac{\Lambda_{tuv}(\rvec_P)}{r_C} \dd \rvec
+\end{equation}
+
+\subsection{Two-electron repulsion integrals (Coulomb)}
+
+
 
 \begin{appendices}
 \section{Terms}
