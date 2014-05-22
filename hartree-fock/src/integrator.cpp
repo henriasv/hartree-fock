@@ -84,6 +84,56 @@ double Integrator::overlapIntegral_dim(int dim, int iA, int iB, Primitive &A, Pr
     return E(dim)(iA, iB, 0)*pow(PI/p, 0.5);
 }
 
+double Integrator::electronElectronIntegral(Primitive &A, Primitive &B, Primitive &C, Primitive &D)
+{
+
+
+    int i = A.xExponent();
+    int j = B.xExponent();
+    int k = A.yExponent();
+    int l = B.yExponent();
+    int m = A.zExponent();
+    int n = B.zExponent();
+
+    int i2 = C.xExponent();
+    int j2 = D.xExponent();
+    int k2 = C.yExponent();
+    int l2 = D.yExponent();
+    int m2 = C.zExponent();
+    int n2 = D.zExponent();
+
+    double a = A.exponent();
+    double b = B.exponent();
+    double c = C.exponent();
+    double d = D.exponent();
+
+    double p = a+b;
+    double q = c+d;
+
+    int tMax = i+j; int uMax = k+l; int vMax = m+n;
+    int tauMax = i2+j2; int nuMax = k2+l2; int phiMax = m2+n2;
+
+    setupE(A, B);
+    setupE2(C, D);
+    setupHermiteIntegrals(A, B, C, D);
+    double integral = 0;
+    for (int t = 0; t<tMax+1; t++) {
+        for (int u = 0; u<uMax+1; u++) {
+            for (int v = 0; v<vMax+1; v++) {
+                for (int tau = 0; tau<tauMax+1; tau++) {
+                    for (int nu = 0; nu<nuMax+1; nu++) {
+                        for (int phi = 0; phi<phiMax+1; phi++){
+                            integral += E(0)(i,j,t)*E2(0)(i2,j2,tau) * E(1)(k,l,u)*E2(1)(k2,l2,nu) * E(2)(m,n,v)*E2(2)(m2,n2,phi) * pow(-1, tau+nu+phi) * R(0)(t+tau, u+nu, v+phi);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    integral *= 2*pow(PI, 5.0/2)/(p*q*sqrt(p+q));
+    return integral;
+}
+
 double Integrator::nuclearElectronIntegral(Primitive &A, Primitive &B, arma::vec nuc_pos)
 {
     int i = A.xExponent();
@@ -209,6 +259,26 @@ void Integrator::setupE(double a, double b, const arma::vec& A_pos, const arma::
 
 }
 
+void Integrator::setupE2(const Primitive &C, const Primitive &D)
+{
+    int i = C.xExponent();
+    int k = C.yExponent();
+    int m = C.zExponent();
+    int j = D.xExponent();
+    int l = D.yExponent();
+    int n = D.zExponent();
+    setupE2(C.exponent(), D.exponent(), C.nucleusPosition(), D.nucleusPosition(), i, j, k, l, m, n);
+}
+
+void Integrator::setupE2(double a, double b, const arma::vec& C_pos, const arma::vec& D_pos, int iC, int iD, int jC, int jD, int kC, int kD)
+{
+    // This function is a slight hack, E is temporarly stored, E2 is created in E, and then put to E2. Then E is restored. This is just because I didnt think there would be necessary with two E's when i first implemented E.
+    arma::field<arma::cube> E_tmp=E;
+    setupE(a, b, C_pos, D_pos, iC, iD, jC, jD, kC, kD);
+    E2 = E;
+    E = E_tmp;
+}
+
 bool Integrator::checkIndexCombinationForE(int iA, int iB, int t)
 {
     if ( t<0 || t>(iA+iB) || iA<0 || iB<0)
@@ -246,6 +316,74 @@ void Integrator::setupHermiteIntegrals(double a, double b, const arma::vec &A_po
     for (int n = 0; n<nMax+1; n++)
     {
         R(n)(0, 0, 0) = pow(-2*p, n)*boys.returnValue(n);
+    }
+
+    for (int tuvSum = 1; tuvSum<nMax; tuvSum ++) {
+        for (int n = 0; n<nMax-tuvSum; n++) {
+            for (int t = 0; t<subMax+1; t++) {
+                for (int u = 0; u<subMax+1; u++) {
+                    for (int v = 0; v<subMax+1; v++) {
+                        // Check if this combination is available now:
+                        if (t+u+v != tuvSum || t+u+v == 0) {
+                            continue;
+                        }
+                        // The largest element of t, u, v is the one that can absorb subtraction! There are several ways to the elements of R, but the one here should work.
+                        int largestElement = std::max(t,std::max(u, v));
+                        if (largestElement == t) {
+                            R(n)(t, u, v) = PC(0)*R(n+1)(t-1, u, v);
+                            if (t>=2)
+                                R(n)(t,u,v) += (t-1)*R(n+1)(t-2, u,v);
+                        }
+                        else if (largestElement == u) {
+                            R(n)(t, u, v) = PC(1)*R(n+1)(t, u-1, v);
+                            if(u>=2)
+                                R(n)(t,u,v) += (u-1)*R(n+1)(t, u-2, v);
+                        }
+                        else {
+                            R(n)(t, u, v) = PC(2)*R(n+1)(t, u, v-1);
+                            if (v>=2)
+                                R(n)(t,u,v) += (v-1)*R(n+1)(t, u, v-2);
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Integrator::setupHermiteIntegrals(const Primitive &A, const Primitive &B, const Primitive &C, const Primitive &D)
+{
+    double a = A.exponent();
+    double b = B.exponent();
+    double c = C.exponent();
+    double d = D.exponent();
+
+    double p = a+b;
+    double q = c+d;
+    double alpha = p*q/(p+q);
+
+    arma::vec P = (a*A.nucleusPosition()+b*B.nucleusPosition())/p;
+    arma::vec Q = (c*C.nucleusPosition()+d*D.nucleusPosition())/q;
+    arma::vec PC = Q-P;
+
+    int tMax = A.xExponent()+B.xExponent()+C.xExponent()+D.xExponent();
+    int uMax = A.yExponent()+B.yExponent()+C.yExponent()+D.yExponent();
+    int vMax = A.zExponent()+B.zExponent()+C.zExponent()+D.zExponent();
+    int nMax = tMax+uMax+vMax+1;
+    int subMax = std::max(tMax, std::max(uMax, vMax));
+
+    boys.set(alpha*arma::dot(PC, PC), nMax);
+
+    R.set_size(nMax+1);
+    for (int i = 0; i<nMax+1; i++) {
+        R(i) = arma::zeros(subMax+1, subMax+1, subMax+1);
+    }
+
+    // Setup R_000N
+    for (int n = 0; n<nMax+1; n++)
+    {
+        R(n)(0, 0, 0) = pow(-2*alpha, n)*boys.returnValue(n);
     }
 
     for (int tuvSum = 1; tuvSum<nMax; tuvSum ++) {
