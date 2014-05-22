@@ -116,6 +116,7 @@ double Integrator::electronElectronIntegral(Primitive &A, Primitive &B, Primitiv
     setupE(A, B);
     setupE2(C, D);
     setupHermiteIntegrals(A, B, C, D);
+
     double integral = 0;
     for (int t = 0; t<tMax+1; t++) {
         for (int u = 0; u<uMax+1; u++) {
@@ -365,7 +366,7 @@ void Integrator::setupHermiteIntegrals(const Primitive &A, const Primitive &B, c
 
     arma::vec P = (a*A.nucleusPosition()+b*B.nucleusPosition())/p;
     arma::vec Q = (c*C.nucleusPosition()+d*D.nucleusPosition())/q;
-    arma::vec PC = Q-P;
+    arma::vec PC = P-Q; // This is really important P-Q, not Q-P!
 
     int tMax = A.xExponent()+B.xExponent()+C.xExponent()+D.xExponent();
     int uMax = A.yExponent()+B.yExponent()+C.yExponent()+D.yExponent();
@@ -383,7 +384,7 @@ void Integrator::setupHermiteIntegrals(const Primitive &A, const Primitive &B, c
     // Setup R_000N
     for (int n = 0; n<nMax+1; n++)
     {
-        R(n)(0, 0, 0) = pow(-2*alpha, n)*boys.returnValue(n);
+        R(n)(0, 0, 0) = pow(-2*(alpha), n)*boys.returnValue(n);
     }
 
     for (int tuvSum = 1; tuvSum<nMax; tuvSum ++) {

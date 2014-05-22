@@ -43,7 +43,7 @@ TEST(hermite_overlap_integral_general)
     Primitive primitiveA(weight,i,k,m,a,A);
     Primitive primitiveB(weight,j,l,n,b,B);
     CHECK_CLOSE(2.2273219e-1, integrator.overlapIntegral(primitiveA,
-    primitiveB), 1e-5);
+                                                         primitiveB), 1e-5);
 }
 
 TEST(hermite_overlap_integral_general2)
@@ -88,7 +88,7 @@ TEST(kinetic_integral1)
     Primitive primitiveA(weight,i,k,m,a,A);
     Primitive primitiveB(weight,j,l,n,b,B);
     CHECK_CLOSE(-9.678702680582e-02, integrator.kineticIntegral(primitiveA,
-    primitiveB), 1e-5);
+                                                                primitiveB), 1e-5);
 }
 
 TEST(kinetic_integral2)
@@ -189,87 +189,180 @@ TEST(GTOnuclear_attraction_integral)
 // GTO_electron_electron_integral tests are taken from Svenn-Arne Dragly's hartree-fock code on github
 TEST(GTO_electron_electron_integral1) {
     arma::vec A(3), B(3), C(3), D(3);
-        A(0) = -0.5; A(1) = 0; A(2) = 0;
-        B = A;
-        C = A;
-        D = A;
-        double a = 13.0077;
-        double b = 13.0077;
-        double c = 13.0077;
-        double d = 13.0077;
+    A(0) = -0.5; A(1) = 0; A(2) = 0;
+    B = A;
+    C = A;
+    D = A;
+    double a = 13.0077;
+    double b = 13.0077;
+    double c = 13.0077;
+    double d = 13.0077;
 
-        Primitive primitiveA(1.0, 0, 0 ,0, a, A);
-        Primitive primitiveB(1.0, 0, 0 ,0, b, B);
-        Primitive primitiveC(1.0, 0, 0 ,0, c, C);
-        Primitive primitiveD(1.0, 0, 0 ,0, d, D);
+    Primitive primitiveA(1.0, 0, 0 ,0, a, A);
+    Primitive primitiveB(1.0, 0, 0 ,0, b, B);
+    Primitive primitiveC(1.0, 0, 0 ,0, c, C);
+    Primitive primitiveD(1.0, 0, 0 ,0, d, D);
 
-        Integrator integrator;
+    Integrator integrator;
 
-        // regression test
-        CHECK_CLOSE(0.0071666040410096028615, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-9);
+    // regression test
+    CHECK_CLOSE(0.0071666040410096028615, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-9);
 }
 
 TEST(GTO_electron_electron_integral2) {
-        arma::vec A(3), B(3), C(3), D(3);
-        A(0) = 0.5;     A(1) = 0; A(2) = 0;
-        B(0) = -0.5;    B(1) = 0; B(2) = 0;
-        C(0) = -0.5;    C(1) = 0; C(2) = 0;
-        D(0) = 0.5;     D(1) = 0; D(2) = 0;
-        double a = 13.0077;
-        double b = 0.121949;
-        double c = 0.444529;
-        double d = 13.0077;
+    arma::vec A(3), B(3), C(3), D(3);
+    A(0) = 0.5;     A(1) = 0; A(2) = 0;
+    B(0) = -0.5;    B(1) = 0; B(2) = 0;
+    C(0) = -0.5;    C(1) = 0; C(2) = 0;
+    D(0) = 0.5;     D(1) = 0; D(2) = 0;
+    double a = 13.0077;
+    double b = 0.121949;
+    double c = 0.444529;
+    double d = 13.0077;
 
-        Primitive primitiveA(1.0, 0, 0 ,0, a, A);
-        Primitive primitiveB(1.0, 0, 0 ,0, b, B);
-        Primitive primitiveC(1.0, 0, 0 ,0, c, C);
-        Primitive primitiveD(1.0, 0, 0 ,0, d, D);
+    Primitive primitiveA(1.0, 0, 0 ,0, a, A);
+    Primitive primitiveB(1.0, 0, 0 ,0, b, B);
+    Primitive primitiveC(1.0, 0, 0 ,0, c, C);
+    Primitive primitiveD(1.0, 0, 0 ,0, d, D);
 
-        Integrator integrator;
-        // regression test
-        CHECK_CLOSE(0.022124581472837051566, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-9);
-    }
+    Integrator integrator;
+    // regression test
+    CHECK_CLOSE(0.022124581472837051566, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-9);
+}
 
-    TEST(GaussianElectronInteractionIntegralTest3) {
-        arma::vec A(3), B(3), C(3), D(3);
-        A(0) = 0.5;     A(1) = 0; A(2) = 0;
-        B(0) = -0.5;    B(1) = 0; B(2) = 0;
-        C(0) = -0.5;    C(1) = 0; C(2) = 0;
-        D(0) = 0.5;     D(1) = 0; D(2) = 0;
-        double a = 13.0077;
-        double b = 0.121949;
-        double c = 0.444529;
-        double d = 13.0077;
+TEST(GaussianElectronInteractionIntegralTest3) {
+    arma::vec A(3), B(3), C(3), D(3);
+    A(0) = 0.5;     A(1) = 0; A(2) = 0;
+    B(0) = -0.5;    B(1) = 0; B(2) = 0;
+    C(0) = -0.5;    C(1) = 0; C(2) = 0;
+    D(0) = 0.5;     D(1) = 0; D(2) = 0;
+    double a = 13.0077;
+    double b = 0.121949;
+    double c = 0.444529;
+    double d = 13.0077;
 
-        Primitive primitiveA(1.0, 0, 0 ,0, a, A);
-        Primitive primitiveB(1.0, 0, 1 ,0, b, B);
-        Primitive primitiveC(1.0, 0, 1 ,0, c, C);
-        Primitive primitiveD(1.0, 0, 0 ,0, d, D);
+    Primitive primitiveA(1.0, 0, 0 ,0, a, A);
+    Primitive primitiveB(1.0, 0, 1 ,0, b, B);
+    Primitive primitiveC(1.0, 0, 1 ,0, c, C);
+    Primitive primitiveD(1.0, 0, 0 ,0, d, D);
 
-        Integrator integrator;
-        // regression test
-        CHECK_CLOSE(0.0001385810300677682, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-9);
-    }
+    Integrator integrator;
+    // regression test
+    CHECK_CLOSE(0.0001385810300677682, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-9);
+}
 
-    TEST(GaussianElectronInteractionIntegralTest4) {
-        arma::vec A(3), B(3), C(3), D(3);
-        A(0) = 0.55; A(1) = 1; A(2) = 3;
-        B(0) = -0.52; B(1) = 5; B(2) = 6;
-        C(0) = -0.53; C(1) = 1; C(2) = 2;
-        D(0) = 0.45; D(1) = 2; D(2) = 4;
+TEST(GaussianElectronInteractionIntegralTest4) {
+    arma::vec A(3), B(3), C(3), D(3);
+    A(0) = 0.55; A(1) = 1; A(2) = 3;
+    B(0) = -0.52; B(1) = 5; B(2) = 6;
+    C(0) = -0.53; C(1) = 1; C(2) = 2;
+    D(0) = 0.45; D(1) = 2; D(2) = 4;
 
-        double a = 13.0077;
-        double b = 0.121949;
-        double c = 0.444529;
-        double d = 10.0077;
+    double a = 13.0077;
+    double b = 0.121949;
+    double c = 0.444529;
+    double d = 10.0077;
 
-        Primitive primitiveA(1.0, 1,0,0, a, A);
-        Primitive primitiveB(1.0, 0,1,0, b, B);
-        Primitive primitiveC(1.0, 0,1,0, c, C);
-        Primitive primitiveD(1.0, 0,1,0, d, D);
+    Primitive primitiveA(1.0, 1,0,0, a, A);
+    Primitive primitiveB(1.0, 0,1,0, b, B);
+    Primitive primitiveC(1.0, 0,1,0, c, C);
+    Primitive primitiveD(1.0, 0,1,0, d, D);
 
-        Integrator integrator;
+    Integrator integrator;
 
-        // regression test
-        CHECK_CLOSE(-6.8145328932903484228e-08, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-9);
-    }
+    // regression test
+    CHECK_CLOSE(-6.8145328932903484228e-08, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-9);
+}
+
+TEST(GaussianElectronInteractionIntegralTest5)
+{
+    arma::vec A(3), B(3), C(3), D(3);
+    A(0) = 1.2; A(1) = 2.3; A(2) = 3.4;
+    B(0) = -1.3; B(1) = 1.4; B(2) = -2.4;
+    C(0) = 2.3; C(1) = 0.9; C(2) = 3.2;
+    D(0) = 5.0; D(1) = 1.9; D(2) = 1.2;
+
+    Primitive primitiveA(1.0, 0,0,0, 0.2, A);
+    Primitive primitiveB(1.0, 0,0,0, 0.3, B);
+    Primitive primitiveC(1.0, 0,0,0, 0.4, C);
+    Primitive primitiveD(1.0, 0,0,0, 0.1, D);
+
+    Integrator integrator;
+    CHECK_CLOSE(1.624848e-01, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-5);
+}
+
+TEST(GaussianElectronInteractionIntegralTest6)
+{
+
+    arma::vec A(3), B(3), C(3), D(3);
+    A(0) = 1.2;     A(1) = 2.3; A(2) = 3.4;
+    B(0) = -1.3;    B(1) = 1.4; B(2) = -2.4;
+    C(0) = 2.3;     C(1) = 0.9; C(2) = 3.2;
+    D(0) = 5.0;     D(1) = 1.9; D(2) = 1.2;
+
+
+    Primitive primitiveA(1.0, 0,0,0, 0.2, A);
+    Primitive primitiveB(1.0, 1,0,0, 0.3, B);
+    Primitive primitiveC(1.0, 0,0,0, 0.4, C);
+    Primitive primitiveD(1.0, 0,0,1, 0.1, D);
+
+    Integrator integrator;
+    CHECK_CLOSE(0.2667434785828074, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-7);
+}
+
+TEST(GaussianElectronInteractionIntegralTest7)
+{
+
+    arma::vec A(3), B(3), C(3), D(3);
+    A(0) = 1.2;     A(1) = 2.3; A(2) = 3.4;
+    B(0) = -1.3;    B(1) = 1.4; B(2) = -2.4;
+    C(0) = 2.3;     C(1) = 0.9; C(2) = 3.2;
+    D(0) = 5.0;     D(1) = 1.9; D(2) = 1.2;
+
+    Primitive primitiveA(1.0, 0,0,0, 0.2, A);
+    Primitive primitiveB(1.0, 1,0,0, 0.3, B);
+    Primitive primitiveC(1.0, 0,2,0, 0.4, C);
+    Primitive primitiveD(1.0, 0,0,1, 0.1, D);
+
+    Integrator integrator;
+
+    CHECK_CLOSE(0.2681206720738772, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-7);
+}
+
+TEST(GaussianElectronInteractionIntegralTest8)
+{
+    arma::vec A(3), B(3), C(3), D(3);
+    A(0) = 1.2;     A(1) = 2.3; A(2) = 3.4;
+    B(0) = -1.3;    B(1) = 1.4; B(2) = -2.4;
+    C(0) = 2.3;     C(1) = 0.9; C(2) = 3.2;
+    D(0) = 5.0;     D(1) = 1.9; D(2) = 1.2;
+
+    Primitive primitiveA(1.0, 1,1,0, 0.2, A);
+    Primitive primitiveB(1.0, 2,0,0, 0.3, B);
+    Primitive primitiveC(1.0, 2,0,0, 0.4, C);
+    Primitive primitiveD(1.0, 2,0,0, 0.1, D);
+
+    Integrator integrator;
+
+
+    CHECK_CLOSE(0.5266872995197744, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-7);
+}
+
+TEST(GaussianElectronInteractionIntegralTest9)
+{
+
+    arma::vec A(3), B(3), C(3), D(3);
+    A(0) = 1.2;     A(1) = 2.3; A(2) = 3.4;
+    B(0) = -1.3;    B(1) = 1.4; B(2) = -2.4;
+    C(0) = 2.3;     C(1) = 0.9; C(2) = 3.2;
+    D(0) = 5.0;     D(1) = 1.9; D(2) = 1.2;
+
+    Primitive primitiveA(1.0, 1,1,0, 0.2, A);
+    Primitive primitiveB(1.0, 0,2,0, 0.3, B);
+    Primitive primitiveC(1.0, 0,2,0, 0.4, C);
+    Primitive primitiveD(1.0, 2,0,0, 0.1, D);
+
+    Integrator integrator;
+
+    CHECK_CLOSE(-0.1273045183436938, integrator.electronElectronIntegral(primitiveA, primitiveB, primitiveC, primitiveD), 1e-7);
+}
