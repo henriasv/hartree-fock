@@ -18,7 +18,11 @@ SOURCES += \
     electronicsystem.cpp \
     berylliumhf.cpp \
     atomicorbitals.cpp \
-    boysfunction.cpp
+    boysfunction.cpp \
+    electronsystem.cpp \
+    nucleus.cpp \
+    contracted.cpp \
+    hfsolver.cpp
 
 HEADERS += \
     primitive.h \
@@ -27,7 +31,11 @@ HEADERS += \
     electronicsystem.h \
     berylliumhf.h \
     atomicorbitals.h \
-    boysfunction.h
+    boysfunction.h \
+    electronsystem.h \
+    nucleus.h \
+    contracted.h \
+    hfsolver.h
 
 OTHER_FILES +=
 

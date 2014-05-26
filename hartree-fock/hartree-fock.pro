@@ -4,5 +4,6 @@ CONFIG += ordered
 SUBDIRS += \
     src \
     example \
-    tests
+    tests \
+    Helium-STO3G
 

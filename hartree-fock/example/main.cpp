@@ -11,10 +11,10 @@ int main()
 {
 
     // Choose system
-    int n = 4;
+    int n = 2;
     int numElectrons = n;
     int nuclearCharge = n;
-    int numBasisFunctions = 4;
+    int numBasisFunctions = 2;
     ElectronicSystem* system = new AtomicOrbitals(numElectrons, nuclearCharge, numBasisFunctions);
     // Initialize solver with system
     HartreeFockSolver solver = HartreeFockSolver(system);
