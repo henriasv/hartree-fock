@@ -135,7 +135,7 @@ double Integrator::electronElectronIntegral(Primitive &A, Primitive &B, Primitiv
     return integral;
 }
 
-double Integrator::nuclearElectronIntegral(Primitive &A, Primitive &B, arma::vec nuc_pos)
+double Integrator::nuclearElectronIntegral(Primitive &A, Primitive &B, const arma::vec nuc_pos)
 {
     int i = A.xExponent();
     int j = B.xExponent();
@@ -292,7 +292,7 @@ bool Integrator::checkIndexCombinationForE(int iA, int iB, int t)
     }
 }
 
-void Integrator::setupHermiteIntegrals(double a, double b, const arma::vec &A_pos, const arma::vec &B_pos, const arma::vec nuc_pos, int iA, int iB, int jA, int jB, int kA, int kB)
+void Integrator::setupHermiteIntegrals(double a, double b, const arma::vec &A_pos, const arma::vec &B_pos, const arma::vec& nuc_pos, int iA, int iB, int jA, int jB, int kA, int kB)
 {
     int tMax = iA+iB;
     int uMax = jA+jB;

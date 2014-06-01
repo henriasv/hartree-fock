@@ -6,7 +6,7 @@
 class HFSolver
 {
 public:
-    HFSolver(ElectronSystem system);
+    HFSolver(ElectronSystem & system);
     void solve();
     void advance();
     void setupUncoupledMatrix();
@@ -23,8 +23,10 @@ public:
     arma::mat uncoupledMatrix();
     arma::field<arma::mat> coupledMatrix();
 
+    ElectronSystem* m_electronSystem; // To be private
+
 private:
-    ElectronSystem* m_electronSystem;
+
     double m_convergenceCriterion;
     int m_maxIterations;
     arma::mat m_densityMatrix;

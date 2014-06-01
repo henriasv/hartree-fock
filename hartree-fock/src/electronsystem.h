@@ -26,6 +26,7 @@ public:
     int numBasisFunctions();
     int numNuclei();
     int numParticles();
+    void flushNuclei();
 
 private:
     std::vector<Contracted> m_contracted;

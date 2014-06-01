@@ -23,7 +23,7 @@
 \date{\today}
 
 \begin{abstract}
-We apply the restricted Hartree-Fock method (RHF) to several atomic and molecular systems.
+We apply the restricted Hartree-Fock method (RHF) to several atomic and molecular systems. We investigate how different GTO bases (**insert***) influence the calculated values of selected observables. We find that...(*Insert main results**)
 \end{abstract}
 \maketitle
 
@@ -146,6 +146,7 @@ where
 	\right]
 \end{equation}
 
+(The next sections will follow Helgakers slides (or book chapter), and summarize the main results to be used in the implementation)
 \section{Cartesian GTO's}
 Cartesian Gaussians are on the form:
 \begin{equation}
@@ -199,7 +200,7 @@ The Hermite integral can be solved in terms of a boys functions $F_n(x)$ and rec
 \end{equation}
 To find the $R$'s, we need \emph{Auxillary Hermite integrals} $R_{tuv}^n$, because they provide sufficient recursion relations to find the $R_{tuv}^0$'s that we are interested in.
 
-The relevant recurrence relations for these integrals are:
+Relevant recurrence relations for these integrals are:
 \begin{align}
 R_{t+1, u, v}^n = tR_{t-1, u, v}^{n+1} + A_xR_{tuv}^{n+1} \\
 R_{t, u+1, v}^n = uR_{t, u-1, v}^{n+1} + A_yR_{tuv}^{n+1} \\
@@ -215,7 +216,7 @@ Hermite integrals of negative indices are taken to be zero.
 
 From looking at the recurrence relations, one sees that there are several sources $(t', u', v', n')$ for finding a particlular integral $R_{tuv}^{n}$
 
-\subsection{Two-electron repulsion integrals (Coulomb)}arma::vec F;
+\subsection{Two-electron repulsion integrals (Coulomb)}
 Evaluation of electron-electron repulsion integrals are very similar to the electron-nucleus integral evaluation.
 
 The integral is on the form:
@@ -228,6 +229,62 @@ Using a similar strategy to the one for electron-nucleus-integration, one ends u
 	(-1)^{\tau+\nu+\phi}R_{t+\tau, u+\nu, v+\phi}(\alpha, \mb{R}_{PQ})
 \end{align}
 Two different sets of Hermite coefficients are now needed. in addition, the argument to the boys function has changed. The distance, is between the centers of each pair of primitive gaussians, and the parameter $\alpha = \frac{pq}{p+q}$. $p = a+b$ and $q = c+d$.
+
+\section{Contracted orbitals}
+
+\part{Methods}
+The restricted Hartree-Fock method is implemented in a c++ program. We use basis sets from (BasisSetExchange) with the normalization factor (). 
+Primitive integrals are verified with unit tests that can be found in the code.
+
+\subsection{Molecules}
+When performing HF-calculations on molecules, the nuclei have to be put in fixed positions. I have chosen to use experimental bond lengths and bond angles when performing calculations on molecules.
+
+\begin{table}
+\caption{Spatial configuration for molecule calculations. Lengths are in atomic units, angles are in degrees.}
+\begin{tabular}[c]{c|c|c}
+Molecule & Bond length & Bond angle \\
+\hline
+$\mbox{H}_2$ & 1.40 & N/A \\
+$\mbox{Be}_2$ & 4.63 & N/A \\
+$\mbox{H}_2\mbox{O}$ & 1.809 & 104.5 \\
+$\mbox{SiO}_2$ & 
+\end{tabular}
+\end{table}  
+
+\part{Results \& Discussion}
+
+\begin{table}[h!tb]
+\caption{HF-energies (in Hartrees) with STO-3G basis}
+\begin{tabular}[c]{c|c|c}
+System & $E_{HF}$ & $E_{exp}$ \\
+\hline
+He & -2.80778 & insert \\
+Be & -14.3519 & insert \\
+$\mbox{H}_2$ & -1.11671 & insert \\
+$\mbox{Be}_2$ & -28.6988 & insert \\
+\end{tabular}
+\end{table}
+
+\begin{table}[h!tb]
+\caption{HF-energies (in Hartrees) with STO-6G basis}
+\begin{tabular}[c]{c|c|c}
+System & $E_{HF}$ & $E_{exp}$ \\
+\hline
+He & insert & insert \\
+Be & -14.5034 & insert \\
+$\mbox{H}_2$ & insert & insert \\
+$\mbox{Be}_2$ & -29.0015 & insert \\
+\end{tabular}
+\end{table}
+
+\begin{table}[h!tb]
+
+\end{table}
+
+\subsection{Implementation efficiency}
+Almost all the time is spent calculating integrals over primitives. Therefore, it is valid to question whether one shold use contracted orbitals, and not just optimize coefficients for all the primitives. (This probla has some good expanation).
+
+
 
 \begin{appendices}
 \section{Terms}

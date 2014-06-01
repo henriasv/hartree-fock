@@ -1,10 +1,11 @@
 #include "hfsolver.h"
 
-HFSolver::HFSolver(ElectronSystem system) :
+HFSolver::HFSolver(ElectronSystem & system) :
     m_electronSystem(&system),
     m_convergenceCriterion(1e-8),
-    m_maxIterations(10)
+    m_maxIterations(20)
 {
+    std::cout << " Nuclear_enery_terms " << m_electronSystem->nuclearEnergyTerms() << std::endl;
     setupOverlapMatrix();
     setupUncoupledMatrix();
     setupCoupledMatrix();
@@ -16,7 +17,7 @@ HFSolver::HFSolver(ElectronSystem system) :
 void HFSolver::solve()
 {
     std::cout << "In solver" << std::endl;
-
+    //std::cout << m_electronSystem->nuclearEnergyTerms() << std::endl;
     // advance
     for (int i = 0; i<m_maxIterations; i++) {
         advance();
@@ -27,25 +28,30 @@ void HFSolver::advance()
 {
     int np = m_electronSystem->numParticles();
     int no = m_electronSystem->numBasisFunctions();
-
+    setupFockMatrix();
     arma::mat Ctmp;
     arma::vec fockEnergies;
 
     arma::vec s;
     arma::mat U;
 
-    arma::eig_sym(s, U, m_overlapMatrix);
+    arma::eig_sym(s, U, m_overlapMatrix, "std");
     arma::mat V = U*arma::diagmat(1.0/arma::sqrt(s));
 
     arma::mat Fprime = V.t() * m_fockMatrix *V;
     arma::mat Cprime;
-    arma::eig_sym(fockEnergies, Cprime, Fprime);
+    arma::eig_sym(fockEnergies, Cprime, Fprime, "std");
 
     m_coefficientMatrix = V*Cprime.submat(0, 0, no-1, np-1);
     normalizeCoefficientMatrix();
     setupDensityMatrix();
     double energy = calcEnergy();
     std::cout << "Energy " << energy << std::endl;
+    /*
+    std::cout << m_fockMatrix << std::endl;
+    std::cout << m_overlapMatrix << std::endl;
+    std::cout << m_coefficientMatrix << std::endl;
+    */
 
     /*
     HartreeFockSolver::advance();
@@ -139,7 +145,7 @@ void HFSolver::normalizeCoefficientMatrix()
         double factor = 0;
         for (int p = 0; p<no; p++) {
             for (int q = 0; q<no; q++) {
-                factor += m_coefficientMatrix(p, k)*m_overlapMatrix(p,q)*m_coefficientMatrix(q,k);
+                factor += m_coefficientMatrix(p,k)*m_overlapMatrix(p,q)*m_coefficientMatrix(q,k);
             }
         }
         m_coefficientMatrix.col(k) = m_coefficientMatrix.col(k)/sqrt(factor);
@@ -185,6 +191,7 @@ double HFSolver::calcEnergy()
             }
         }
     }
+    energy += m_electronSystem->nuclearEnergyTerms();
     return energy;
 }
 

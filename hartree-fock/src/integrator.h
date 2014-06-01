@@ -13,8 +13,8 @@ public:
     double overlapIntegral(Primitive &A, Primitive &B);
     double overlapIntegral_dim(int dim, int iA, int iB, Primitive &A, Primitive &B);
     double electronElectronIntegral(Primitive &A, Primitive &B, Primitive &C, Primitive &D);
-    double nuclearElectronIntegral(Primitive &A, Primitive &B, arma::vec nuc_pos);
-    void setupHermiteIntegrals(double a, double b, const arma::vec& A_pos, const arma::vec& B_pos, const arma::vec nuc_pos, int iA, int iB, int jA, int jB, int kA, int kB); //Should be private
+    double nuclearElectronIntegral(Primitive &A, Primitive &B, const arma::vec nuc_pos);
+    void setupHermiteIntegrals(double a, double b, const arma::vec& A_pos, const arma::vec& B_pos, const arma::vec& nuc_pos, int iA, int iB, int jA, int jB, int kA, int kB); //Should be private
     void setupHermiteIntegrals(const Primitive& A, const Primitive& B, const Primitive& C, const Primitive& D);
 
 

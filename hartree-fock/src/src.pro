@@ -22,7 +22,8 @@ SOURCES += \
     electronsystem.cpp \
     nucleus.cpp \
     contracted.cpp \
-    hfsolver.cpp
+    hfsolver.cpp \
+    turbomoleparser.cpp
 
 HEADERS += \
     primitive.h \
@@ -35,7 +36,8 @@ HEADERS += \
     electronsystem.h \
     nucleus.h \
     contracted.h \
-    hfsolver.h
+    hfsolver.h \
+    turbomoleparser.h
 
 OTHER_FILES +=
 

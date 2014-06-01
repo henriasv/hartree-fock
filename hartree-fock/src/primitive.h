@@ -1,6 +1,10 @@
 #ifndef PRIMITIVE_H
 #define PRIMITIVE_H
 
+#ifndef PI
+#define PI 3.14159265358979323
+#endif
+
 #include <armadillo>
 
 class Primitive
@@ -13,6 +17,7 @@ public:
     int xExponent() const;
     double weight() const;
     const arma::vec& nucleusPosition() const;
+    void normalizePrimitive();
 
 private:
     double m_weight;
@@ -21,6 +26,7 @@ private:
     int m_zExponent;
     double m_exponent;
     arma::vec m_nucleusPosition;
+    int factorial(int n);
 
 };
 

@@ -48,9 +48,9 @@ double ElectronSystem::uncoupledIntegral(int p, int q)
     Contracted& qBF = m_contracted.at(q);
     for (Primitive pP : pBF.primitives()) {
         for (Primitive qP : qBF.primitives()) {
-            result += pP.weight()*qP.weight()*m_integrator.kineticIntegral(pP, qP);
-            for (Nucleus nuc : m_nuclei) {
-                result -= nuc.charge()*pP.weight()*qP.weight() * m_integrator.nuclearElectronIntegral(pP, qP, nuc.position());
+            result = result + pP.weight()*qP.weight()*m_integrator.kineticIntegral(pP, qP);
+            for (Nucleus& nuc : m_nuclei) {
+                result = result - nuc.charge()*pP.weight()*qP.weight() * m_integrator.nuclearElectronIntegral(pP, qP, nuc.position());
             }
         }
     }
@@ -60,10 +60,10 @@ double ElectronSystem::uncoupledIntegral(int p, int q)
 double ElectronSystem::nuclearEnergyTerms()
 {
     double result = 0;
-    for(int i = 0; i < m_numNuclei; i++) {
-        Nucleus & nuc1 = m_nuclei.at(i);
-        for(int j = i + 1; j < m_numNuclei; j++) {
-            Nucleus & nuc2 = m_nuclei.at(j);
+    for (int i = 0; i<m_numNuclei; i++) {
+        Nucleus& nuc1 = m_nuclei.at(i);
+        for (int j = i+1; j<m_numNuclei; j++) {
+            Nucleus& nuc2 = m_nuclei.at(j);
             result += nuc1.charge()*nuc2.charge() / sqrt(arma::dot(nuc1.position() - nuc2.position() , nuc1.position() - nuc2.position()));
         }
     }
@@ -82,7 +82,7 @@ void ElectronSystem::addContracted(Contracted in_contracted)
 void ElectronSystem::addNucleus(Nucleus in_nucleus)
 {
     m_nuclei.push_back(in_nucleus);
-    m_numNuclei++;
+    m_numNuclei ++;
 }
 
 int ElectronSystem::numBasisFunctions()
@@ -98,4 +98,10 @@ int ElectronSystem::numNuclei()
 int ElectronSystem::numParticles()
 {
     return m_numParticles;
+}
+
+void ElectronSystem::flushNuclei()
+{
+    m_nuclei.clear();
+    m_numNuclei = 0;
 }

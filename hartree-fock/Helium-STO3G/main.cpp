@@ -29,23 +29,18 @@ int main()
     // Building STO-3G orbitals for helium
     // 1s orbital
     arma::vec nucleusPosition(3);
-    nucleusPosition(0) = 0.0;
-    nucleusPosition(1) = 0.0;
-    nucleusPosition(2) = 0.0;
+    nucleusPosition(0) = 0.1;
+    nucleusPosition(1) = 0.1;
+    nucleusPosition(2) = 0.1;
 
     int i, j, k;
     i=j=k=0; // 1s orbital
-    double weight = 0.15432897;
-    double a = 6.36242139;
-    Primitive prim1(weight, i, j, k, a, nucleusPosition);
+    double weights[] = {0.15432897, 0.53532814, 0.44463454};
+    double a[] = {6.36242139, 1.15892300, 0.31364979};
 
-    weight = 0.53532814;
-    a = 1.15892300;
-    Primitive prim2(weight, i, j, k, a, nucleusPosition);
-
-    weight = 0.44463454;
-    a = 0.31364979;
-    Primitive prim3(weight, i, j, k, a, nucleusPosition);
+    Primitive prim1(weights[0], i, j, k, a[0], nucleusPosition);
+    Primitive prim2(weights[1], i, j, k, a[1], nucleusPosition);
+    Primitive prim3(weights[2], i, j, k, a[2], nucleusPosition);
 
     Contracted orb1s_Helium;
     orb1s_Helium.addPrimitive(prim1);
@@ -61,10 +56,6 @@ int main()
     electronSystem.addNucleus(nucleus);
 
     HFSolver solver(electronSystem);
-
-    std::cout << solver.overlapMatrix() << std::endl;
-    std::cout << solver.uncoupledMatrix() << std::endl;
-    std::cout << solver.coupledMatrix() << std::endl;
 
     solver.solve();
 

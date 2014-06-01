@@ -7,8 +7,9 @@ class Nucleus
 {
 public:
     Nucleus(arma::vec in_nucleusPosition, int in_nuclearCharge);
-    arma::vec position();
+    const arma::vec & position() const;
     int charge();
+
 
 private:
     arma::vec m_nucleusPosition;

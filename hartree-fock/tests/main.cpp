@@ -3,6 +3,7 @@
 #include <unittest++/UnitTest++.h>
 #include <boysfunction.h>
 #include <armadillo>
+#include <turbomoleparser.h>
 
 int main()
 {
