@@ -2,6 +2,7 @@
 #define HFSOLVER_H
 
 #include <electronsystem.h>
+#include <armadillo>
 
 class HFSolver
 {
@@ -18,6 +19,7 @@ public:
     void resetCoefficientMatrix();
     void setupFockMatrix();
     double calcEnergy();
+    void dumpDensity2D(char filename[], int resolution,double x_mid, double y_mid, double x_max, double y_max);
 
     arma::mat overlapMatrix();
     arma::mat uncoupledMatrix();

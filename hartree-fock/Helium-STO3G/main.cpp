@@ -29,9 +29,9 @@ int main()
     // Building STO-3G orbitals for helium
     // 1s orbital
     arma::vec nucleusPosition(3);
-    nucleusPosition(0) = 0.1;
-    nucleusPosition(1) = 0.1;
-    nucleusPosition(2) = 0.1;
+    nucleusPosition(0) = 0.0;
+    nucleusPosition(1) = 0.0;
+    nucleusPosition(2) = 0.0;
 
     int i, j, k;
     i=j=k=0; // 1s orbital
@@ -58,6 +58,7 @@ int main()
     HFSolver solver(electronSystem);
 
     solver.solve();
+    solver.dumpDensity2D("/scratch/density.bin", 100, 1, 1);
 
     cout << "Hello World!" << endl;
     return 0;

@@ -11,5 +11,6 @@ SUBDIRS += \
     Be2-STO3G \
     sandbox \
     H20 \
-    Ne
+    Ne \
+    Ar
 

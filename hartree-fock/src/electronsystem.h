@@ -27,6 +27,7 @@ public:
     int numNuclei();
     int numParticles();
     void flushNuclei();
+    double particleDensity(const arma::mat& C, double x, double y, double z);
 
 private:
     std::vector<Contracted> m_contracted;

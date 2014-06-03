@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{caption}
 \usepackage[toc,page]{appendix}
+\usepackage{graphicx}
 \bibliographystyle{naturemag}
 
 \newcommand{\rvec}{\mathbf{r}}
@@ -278,8 +279,25 @@ $\mbox{Be}_2$ & -29.0015 & insert \\
 \end{table}
 
 \begin{table}[h!tb]
-
+\caption{HF-energies (in Hartrees) with 3-21G and 4-31G basis}
+\begin{tabular}[c]{c|c|c|c}
+System & 3-21G & 4-31G & $E_{\mbox{exp}}$ \\
+\hline
+Ne & -127.804 & insert & -128.9383 \\
+Ar & -524.343 &insert & -527.544 \\
+$\mbox{H}_2\mbox{O}$ & -75.5854 & -75.9074 & insert \\
+\end{tabular}
 \end{table}
+
+\begin{figure}[h!tb]
+\includegraphics[width=0.45\textwidth]{./figures/H2Odensity_431g.pdf}
+\caption{Electron density for H$_2$O with 4-31G basis functions on all atoms}
+\end{figure}
+
+\begin{figure}[h!tb]
+\includegraphics[width=0.45\textwidth]{./figures/H2density_sto3g.pdf}
+\caption{Electron density for H$_2$ with STO3G basis functions on all atoms}
+\end{figure}
 
 \subsection{Implementation efficiency}
 Almost all the time is spent calculating integrals over primitives. Therefore, it is valid to question whether one shold use contracted orbitals, and not just optimize coefficients for all the primitives. (This probla has some good expanation).

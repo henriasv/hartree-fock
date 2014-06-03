@@ -23,8 +23,8 @@ int main()
     Nucleus H2(posH2,1);
     Nucleus O(posO,8);
 
-    TurboMoleParser parserO("../../data/basis_sets/O_3-21g.txt");
-    TurboMoleParser parserH("../../data/basis_sets/H_3-21g.txt");
+    TurboMoleParser parserO("../../data/basis_sets/O_4-31g.txt");
+    TurboMoleParser parserH("../../data/basis_sets/H_4-31g.txt");
 
     std::vector<Contracted> H1contracted = parserH.returnContracted(posH1);
     std::vector<Contracted> H2contracted = parserH.returnContracted(posH2);
@@ -48,5 +48,6 @@ int main()
 
     HFSolver solver(system);
     solver.solve();
+    solver.dumpDensity2D("/scratch/densityH2O.bin", 800, 0,0, 3, 3);
 }
 

@@ -9,6 +9,7 @@ public:
     Contracted();
     std::vector<Primitive> primitives();
     void addPrimitive(Primitive primitive);
+    double evaluate(double x, double y, double z);
 
 private:
     std::vector<Primitive> m_primitives;

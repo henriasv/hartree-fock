@@ -1,10 +1,34 @@
 #include <iostream>
+#include <hfsolver.h>
+#include <electronsystem.h>
+#include <turbomoleparser.h>
+#include <nucleus.h>
+#include <contracted.h>
+#include <cmath>
 
 using namespace std;
 
 int main()
 {
-    cout << "Hello World!" << endl;
-    return 0;
+
+    arma::vec posNe(3);
+    posNe.zeros();
+
+    Nucleus Ne(posNe,10);
+
+    TurboMoleParser parserNe("../../data/basis_sets/Ne_3-21g.txt");
+
+    std::vector<Contracted> Necontracted = parserNe.returnContracted(posNe);
+
+    ElectronSystem system(5); // 10 electrons in argon
+
+    for (Contracted contracted : Necontracted) {
+        system.addContracted(contracted);
+    }
+
+    system.addNucleus(Ne);
+
+    HFSolver solver(system);
+    solver.solve();
 }
 

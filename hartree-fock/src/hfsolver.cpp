@@ -195,6 +195,25 @@ double HFSolver::calcEnergy()
     return energy;
 }
 
+/**
+ * @brief HFSolver::dumpDensity2D Dump density from xy-plane
+ * @param filename
+ * @param resolution
+ */
+void HFSolver::dumpDensity2D(char filename[], int resolution, double x_mid, double y_mid, double x_max, double y_max)
+{
+    arma::mat densities(resolution, resolution);
+    densities.zeros();
+    double dx = 2*x_max/resolution;
+    double dy = 2*y_max/resolution;
+    for (int i = -resolution/2; i<resolution/2; i++) {
+        for (int j = -resolution/2; j<resolution/2; j++) {
+            densities(i+resolution/2, j+resolution/2) = m_electronSystem->particleDensity(m_coefficientMatrix, i*dx+x_mid, j*dy+y_mid, 0);
+        }
+    }
+    densities.save(filename, arma::raw_binary);
+}
+
 
 arma::mat HFSolver::overlapMatrix()
 {

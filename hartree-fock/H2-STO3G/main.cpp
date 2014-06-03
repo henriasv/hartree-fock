@@ -60,7 +60,7 @@ $end
     HFSolver solver(system);
     solver.solve();
 
-
+    solver.dumpDensity2D("/scratch/densityH2.bin", 200, 0.7, 0, 2, 2);
 
     cout << "Hello World!" << endl;
     return 0;

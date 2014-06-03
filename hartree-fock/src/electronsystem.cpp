@@ -105,3 +105,18 @@ void ElectronSystem::flushNuclei()
     m_nuclei.clear();
     m_numNuclei = 0;
 }
+
+double ElectronSystem::particleDensity(const arma::mat &C, double x, double y, double z)
+{
+    double result = 0;
+    for (int i = 0; i<m_numParticles; i++) {
+        double partialsum = 0;
+        for (int j = 0; j<m_numBasisFunctions; j++) {
+            Contracted & contracted = m_contracted.at(j);
+            double eval = contracted.evaluate(x, y, z);
+            partialsum += C(j, i)*C(j, i)*eval*eval;
+        }
+        result += partialsum*partialsum;
+    }
+    return result;
+}
