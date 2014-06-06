@@ -12,5 +12,6 @@ SUBDIRS += \
     sandbox \
     H20 \
     Ne \
-    Ar
+    Ar \
+    SiO2
 

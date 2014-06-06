@@ -30,5 +30,6 @@ int main()
 
     HFSolver solver(system);
     solver.solve();
+    solver.dumpDensity2D("/scratch/densityAr_321g.bin", 200, 0, 0, 1, 1);
 }
 

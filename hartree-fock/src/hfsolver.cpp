@@ -3,9 +3,11 @@
 HFSolver::HFSolver(ElectronSystem & system) :
     m_electronSystem(&system),
     m_convergenceCriterion(1e-8),
-    m_maxIterations(20)
+    m_maxIterations(10000),
+    m_iterationsUsed(0),
+    m_energy(0)
 {
-    std::cout << " Nuclear_enery_terms " << m_electronSystem->nuclearEnergyTerms() << std::endl;
+    //std::cout << " Nuclear_enery_terms " << m_electronSystem->nuclearEnergyTerms() << std::endl;
     setupOverlapMatrix();
     setupUncoupledMatrix();
     setupCoupledMatrix();
@@ -14,14 +16,20 @@ HFSolver::HFSolver(ElectronSystem & system) :
     setupFockMatrix();
 }
 
-void HFSolver::solve()
+double HFSolver::solve()
 {
-    std::cout << "In solver" << std::endl;
-    //std::cout << m_electronSystem->nuclearEnergyTerms() << std::endl;
-    // advance
     for (int i = 0; i<m_maxIterations; i++) {
+        arma::vec prevFockEnergies = m_fockEnergies;
         advance();
+        if (i>0) {
+            double convergenceMeasure = arma::sum(arma::abs(m_fockEnergies-prevFockEnergies));
+            m_iterationsUsed = i;
+            if (convergenceMeasure<m_convergenceCriterion) {
+                break;
+            }
+        }
     }
+    return m_energy;
 }
 
 void HFSolver::advance()
@@ -30,7 +38,6 @@ void HFSolver::advance()
     int no = m_electronSystem->numBasisFunctions();
     setupFockMatrix();
     arma::mat Ctmp;
-    arma::vec fockEnergies;
 
     arma::vec s;
     arma::mat U;
@@ -40,47 +47,12 @@ void HFSolver::advance()
 
     arma::mat Fprime = V.t() * m_fockMatrix *V;
     arma::mat Cprime;
-    arma::eig_sym(fockEnergies, Cprime, Fprime, "std");
+    arma::eig_sym(m_fockEnergies, Cprime, Fprime, "std");
 
     m_coefficientMatrix = V*Cprime.submat(0, 0, no-1, np-1);
     normalizeCoefficientMatrix();
     setupDensityMatrix();
-    double energy = calcEnergy();
-    std::cout << "Energy " << energy << std::endl;
-    /*
-    std::cout << m_fockMatrix << std::endl;
-    std::cout << m_overlapMatrix << std::endl;
-    std::cout << m_coefficientMatrix << std::endl;
-    */
-
-    /*
-    HartreeFockSolver::advance();
-      ElectronSystem* f = electronSystem();
-      uint no = f->nBasisFunctions();
-      uint nk = f->nParticles() / 2;
-      setupFockMatrix();
-
-      vec s;
-      mat U;
-      eig_sym(s, U, overlapMatrix());
-
-      mat V = U*diagmat(1.0/sqrt(s));
-
-      const mat &F = m_fockMatrix;
-      mat Fprime = V.t() * F * V;
-
-      mat Cprime;
-      eig_sym(m_fockEnergies, Cprime, Fprime);
-
-
-      mat &C = m_coefficientMatrix;
-      C = V*Cprime.submat(0, 0, no - 1, nk - 1);
-      normalizeCoefficientMatrix(nk, C);
-
-      setupDensityMatrix();
-
-      double energy = 0;
-      */
+    m_energy = calcEnergy();
 }
 
 void HFSolver::setupUncoupledMatrix()
@@ -193,6 +165,11 @@ double HFSolver::calcEnergy()
     }
     energy += m_electronSystem->nuclearEnergyTerms();
     return energy;
+}
+
+int HFSolver::iterationsUsed()
+{
+    return m_iterationsUsed;
 }
 
 /**

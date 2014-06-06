@@ -58,7 +58,7 @@ int main()
     HFSolver solver(electronSystem);
 
     solver.solve();
-    solver.dumpDensity2D("/scratch/density.bin", 100, 1, 1);
+    solver.dumpDensity2D("/scratch/density.bin", 100, 0, 0, 1, 1);
 
     cout << "Hello World!" << endl;
     return 0;

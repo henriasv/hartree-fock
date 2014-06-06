@@ -8,7 +8,7 @@ class HFSolver
 {
 public:
     HFSolver(ElectronSystem & system);
-    void solve();
+    double solve();
     void advance();
     void setupUncoupledMatrix();
     void setupOverlapMatrix();
@@ -19,6 +19,7 @@ public:
     void resetCoefficientMatrix();
     void setupFockMatrix();
     double calcEnergy();
+    int iterationsUsed();
     void dumpDensity2D(char filename[], int resolution,double x_mid, double y_mid, double x_max, double y_max);
 
     arma::mat overlapMatrix();
@@ -37,6 +38,9 @@ private:
     arma::mat m_coefficientMatrix;
     arma::mat m_uncoupledMatrix;
     arma::field<arma::mat> m_coupledMatrix;
+    arma::vec m_fockEnergies;
+    int m_iterationsUsed;
+    double m_energy;
 };
 
 #endif // HFSOLVER_H

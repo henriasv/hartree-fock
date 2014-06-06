@@ -19,12 +19,13 @@
 %opening
 
 \begin{document}
-\title{Project - FYS4411}
+\title{Project in FYS4411 - Hartree-Fock calculations on atoms and small molecules}
 \author{Henrik Andersen Sveinsson}
+\affiliation{Department of Physics, University of Oslo}
 \date{\today}
 
 \begin{abstract}
-We apply the restricted Hartree-Fock method (RHF) to several atomic and molecular systems. We investigate how different GTO bases (**insert***) influence the calculated values of selected observables. We find that...(*Insert main results**)
+We apply the restricted Hartree-Fock method (RHF) to several atomic and molecular systems. We bechmark a Hartree-Fock solver using known correlation energies, and investigate how different GTO bases, STO-3G, STO-6G, 3-21G and 4-31G influence ground state energies and nuclei configurations.
 \end{abstract}
 \maketitle
 
@@ -33,91 +34,31 @@ We apply the restricted Hartree-Fock method (RHF) to several atomic and molecula
 The goal of this project is to perform Hartree-Fock computations in order to find an optimal basis for the single particle wave-functions for Helium, Beryllium and Neon.
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\part{Theory}
+\part{Theory \& Methods}
 %%%%%%%%%%%%%%%%%%%%%%%
 \section{The Hartree-Fock method}
-
+The Hartree-Fock (HF) method is a method to approximate and solve the time-independent Schrodinger equation, $H\psi = E\psi$. 
 \subsection{Approximations}
 There are five main approximations in the Hartree-Fock method:
 \begin{itemize}
  \item The Born-Oppenheimer approximation
- \item Relativistic effects are neglected
- \item The solution is a linear combination of (typically orthogonal) basis functions
+ \item The solution is a linear combination of basis functions
  \item Each energy eigenfunction is assumed to be describable by a single Slater determinant
  \item The mean field approximation is implied. 
 \end{itemize}
 
-The Hartree equation in atomic units:
-\begin{equation}
- \left[ -\frac{1}{2}\nabla^2 -\sum_n \frac{Z_n}{|\rvec -\Rvec_n|} + 
- \sum_{l=1}^N \int \dd x' |\psi_l(\xvec)|^2 \frac{1}{|\rvec -\rvec'|}\right] \psi_k(\xvec) 
- = E' \psi_k (\xvec)
-\end{equation}
-
-Note that $\xvec' = (\rvec', s')$, so that $\int \dd x' = \sum_{s'} \int \dd \rvec'$.
-
-The last term on the left side is called the \emph{Hartree potential}. 
-
-The Hartree-Fock functional in our case reads:
+The two last approximations are the ones that differentiate the HF method from other similar methods. The HF-method leads us to the Hartree-Fock functional which reads:
 \begin{equation}
 	E[\Phi] = \sum_{\mu = 1}^N \langle \mu |h|\mu \rangle + \frac{1}{2} \sum_{\mu = 1}^N\sum_{\nu=1}^N \left[ \langle \mu\nu |\frac{1}{r_{ij}}| \mu\nu\rangle - \langle \mu\nu |\frac{1}{r_{ij}}| \nu\mu\rangle \right]
 \end{equation}
+Where the fuctions with greek letters are functions that if put into a slater determinant, will be our approximation to the electronic wave function. The goal is to find these functions. 
 
-\subsection{The Slater determinant}
-Since electrons are indistinguishable, the Hamiltonian commutes with the particle-exchange operator $P_{ij}$:
-\begin{equation}
-	\Pvec_{ij}\Psi(\xvec_1, \xvec_2, ..., \xvec_i, ..., \xvec_j, ... \xvec_N) = \Psi(\xvec_1, \xvec_2, ..., \xvec_j, ..., \xvec_i, ... \xvec_N)
-\end{equation}
-
-The eigenvalue of $P$ is $-1$ (experimental) for fermions. We are working with an independent-particle Hamiltonian, so the electron state can be written as a product of single-electron states:
-\begin{equation}
-	\Psi(\xvec_1, ..., \xvec_N) = \psi_1(\xvec_1)\cdots\psi_N(\xvec_N)
-\end{equation}
-
-Many-electron states are required to be antisymmetrical with respect to the particle exchange. We assume the many-body elevtronic state to take form of an anti-symmetrized sum of permutations of the single-particle wave function. 
-
-\begin{equation}
-	\Psi_{AS} (\xvec_1, ..., \xvec_N) = \frac{1}{\sqrt{N!}} \sum_\mb{P} \epsilon_P \mb{P} \psi_1(\xvec_1) \cdots \psi_N(\xvec_N)
-\end{equation}
-
-This is known as a slater determinant.
-
-\section{Bases and transformations}
-We start out by using spin-orbitals $\psi_k$ as a basis for our approximation to the many-body electronic wave function. We assume the basis functions are orthonormal, i.e. $\langle \psi_i, \psi_j \rangle = \delta_{ij}$. We can construct a new basis of spin-orbitals by applying a unitary transformation, given by a unitary matrix $\mb{C}$. Since unitary matrices preserve inner products, then the orthonormality property of tha basis is preserved through the unitary transformation. 
+We begin by using the fact that electrons come in pairs, and that two electrons of opposite spin can occupy the same orbital state. This means we can only investigate \emph{closed shell} systems, and that the method we use is \emph{Restricted Hartree-Fock}. Our strategy will be to minimize the Hartree-Fock functional, i.e. find the optimal coefficients with respect to set of basis functions. The variational principle guarantees us that this will be an upper enstimate of the ground state energy of the system.
 
 
-Let us then look at the relation between the slater determinant of $\{ \psi\}$ and that of $\{\psi'\}$:
-We start by defining a matrix $\mb{M}$ as
-\begin{equation}
-	M_{ij} =\frac{1}{\sqrt{N!}} \psi_j(\xvec_i)
-\end{equation}
-
-We want to show that the Slater determinant constructed from the spin orbitals $\{\psi'\}$ can be written as the determinant of the matrix product $\mb{C}\mb{M}$. Remember $\det(AB) = \det(BA) = \det(BA^T)$, so we can work with $\mb{M}'=\mb{M}\mb{C^T}$.
-
-If we write out this product, we find:
-\begin{equation}
-	(MC^T)_{ij} = \sum_{k} M_{ik} C_{jk}
-\end{equation}
-\begin{equation}
-	= \sum_{k}\frac{1}{\sqrt{N!}}C_{jk}\psi_k(\xvec_i)
-\end{equation}
-
-We originally assumed $C$ to be taking $\{ \psi\}$ to $\{\psi'\}$, so:
-\begin{equation}
-	\psi_k' = \sum_{l=1}^N C_{kl} \psi_l
-	\label{eq:basis_change}
-\end{equation}
-Which means
-\begin{equation}
-(MC^T)_{ij} = \frac{1}{\sqrt{N!}} \psi_j'(x_i)
-\end{equation}
-The determinant of this matrix will be the same as the Slater determinant constructed from the new basis $\{\psi'\}$.
-
-Now we want to find the relation between $\det{M}$ and $\det{M'}$. They are different by a factor of $\det{C^T} = \det{C}$. Since $C$ is unitary, $|\det C| = 1$.
 
 \section{Minimizing the Hartree-Fock functional}
-We will apply some sort of variational scheme to the Hartree-Fock functional in order to find an optimal basis $\{\psi'\}$ for the single-particle wave functions. We remeber the unitary basis-change matrix C. 
-We now write the Hartree-Fock functional in terms of the new basis obtained from equation \ref{eq:basis_change}. We represent this new basis with latin letters, whereas the old basis is represented by greek letters. 
+We will apply some sort of variational scheme to the Hartree-Fock functional in order to find an optimal basis $\{\psi'\}$ for the single-particle wave functions. We use a unitary transformation to write the HF-equation for a different basis. This is explained in the appendix. We represent this new basis with latin letters, whereas the old basis is represented by greek letters. 
 \begin{equation}
 	E[\Psi] = \sum_{a=1}^N \langle a|h|a \rangle + \frac{1}{2} \sum_{ab}\left[  \langle ab |\frac{1}{r_{ij}}|ab \rangle - \langle ab | \frac{1}{r_{ij} }| ba\rangle \right]
 \end{equation}
@@ -133,29 +74,46 @@ We now expand all these basis functions in the old basis:
 	&\left[  \langle \alpha\beta |\frac{1}{r_{ij}}|\gamma\delta \rangle - \langle \alpha\beta | \frac{1}{r_{ij} }| \delta\gamma \rangle \right]
 \end{align}
 
-For some reason this takes us to:
+This takes us to:
 \begin{equation}
 	\sum_\gamma^N h_{\alpha\gamma}^{HF} C_{k\gamma} = \epsilon_k C_{k\alpha}
+	\label{eq:hfsum}
 \end{equation}
 
 where 
 \begin{equation}
-	h_{a\gamma}^{HF} = \langle \alpha |h|\gamma\rangle + \frac{1}{2}\sum_{a \beta \delta}  C^*_{a\beta}C_{a\delta} \left[ 
+	h_{\alpha\gamma}^{HF} = \langle \alpha |h|\gamma\rangle + \frac{1}{2}\sum_{a \beta \delta}  C^*_{a\beta}C_{a\delta} \left[ 
 	\langle\alpha \beta|\frac{1}{r_{ij}}| \gamma \delta \rangle
 	-
 	\langle\alpha \beta|\frac{1}{r_{ij}}| \delta \gamma \rangle
 	\right]
 \end{equation}
 
-(The next sections will follow Helgakers slides (or book chapter), and summarize the main results to be used in the implementation)
-\section{Cartesian GTO's}
+We now take into account that two electrons can be in the same orbital state. According to \cite{thijssen2007computational} page 63, this changes $h^{HF}$ to:
+\begin{equation}
+	h_{\alpha\gamma}^{HF} = \sandwich{\alpha}{h}{\gamma} + \frac{1}{2}\sum_{a\beta\delta} C_{a\beta}C^*_{a\delta} (2\sandwich{\alpha\beta}{\frac{1}{r_{ij}}}{\gamma\delta}-\sandwich{\alpha\beta}{\frac{1}{r_{ij}}}{\delta\gamma} )
+\end{equation}
+In addition, the sum of equation \ref{eq:hfsum} now goes to $\frac{N}{2}$, which means we count two-electron states. To allow for non-orthogonal basis sets, we introduce the overlap matrix $\mb{S}$, such that the equation we need to solve is:
+\begin{equation}
+		\sum_\gamma^{N/2} h_{\alpha\gamma}^{HF} C_{k\gamma} = \epsilon_k S_{k\alpha}C_{k\alpha}
+	\label{eq:hfsumfinal}
+\end{equation}
+
+$h^{HF}$ gives rise to the \emph{Fock matrix}. Almost all the work in the HF-method is to find the Fock matrix. From there on, we have a self consistent set of equations, which can be solved iteratively with standard linear algebra software. I use Armadillo \cite{Sanderson2011} for this project. 
+
+
+\section{Integral evaluations}
+Now that we know how to set up the linear algebra problem of Hartree-Fock, we move on to the integral evaluations, since the brakets are integrals. At the end of the section, it is explained how the integrals go in to the method described above. 
+This section about integral evaluations will follow Helgakers slides \cite{helgaker2006}. The necessary results for the implementation in this project are included. 
+\subsection{Cartesian GTO's}
 Cartesian Gaussians are on the form:
 \begin{equation}
 	G_a = G_{ikm}(a, \rvec_A) = x^i_A y^k_A z^m_A e^{-ar^2_A}
+	\label{eq:gaussianprimitive}
 \end{equation}
 Where $r_A = |\rvec_A|$ is the distance to the origin of the Gaussian.
 
-\section{Integral evaluations}
+
 \subsection{Overlap integrals}
 The overlap integrals $S_{ab} = \overlap{G_a}{G_b}$ are:
 \begin{equation}
@@ -231,14 +189,36 @@ Using a similar strategy to the one for electron-nucleus-integration, one ends u
 \end{align}
 Two different sets of Hermite coefficients are now needed. in addition, the argument to the boys function has changed. The distance, is between the centers of each pair of primitive gaussians, and the parameter $\alpha = \frac{pq}{p+q}$. $p = a+b$ and $q = c+d$.
 
-\section{Contracted orbitals}
+\subsection{Contracted basis functions}
+It is common in Hartree-Fock calculations to use so called \emph{contracted basis functions}. This is to reduce the size of the fock matrix. If the gaussian primitives are defined as in equation \ref{eq:gaussianprimitive}, we define the contracted basis functions:
+\begin{equation}
+	\varphi_k = \sum_a c_{ka} \phi_a
+\end{equation}
+These contracted basis functions go into the HF-method as $\alpha, \beta, \gamma, \delta$. An integral over contracted basis functions is a sum of integrals of the corresponding primitive basis functions. The expansion coeficients $c_{ka}$ can in principle be found using the hartree fock method, but we shall not look into that. We take the expansion coeficients as given, and get them from EMSL Basis Bet Exhange\cite{Schuchardt2007}. We will be using the following basis sets: STO-3G \& STO-6G \cite{Hehre1969,Hehre1970}, 3-21G \& 4-31G \cite{binkley1980self,gordon1982basis}. The citations of basis sets are done as instructed on EMSL Basis Set Exchange.
 
-\part{Methods}
+\subsection{Hydrogen-like basis functions}
+As a first step to test the HF-method, we implemented. Hydrogen-like basis functions. These functions do not need contraction. In addition they are orthogonal, which means we don't need the overlap matrix in the Roothan equation. We used 1s, 2s, 3s, and 4s orbitals and checked the method against known energies for the Helium and Beryllium atoms. 
+
+\section{Numerical implementation}
 The restricted Hartree-Fock method is implemented in a c++ program. We use basis sets from (BasisSetExchange) with the normalization factor (). 
 Primitive integrals are verified with unit tests that can be found in the code.
+The code has been implemented with a focus on robustness rather than efficiency, so the calculations are rather slow. Typical time spent on one Intel i5 cpu-core is 10 seconds for the H$_2$O molecule with a 4-31G basis set. The code for the HF-solver is available on github: \url{https://github.com/henriasv/hartree-fock}.
 
-\subsection{Molecules}
-When performing HF-calculations on molecules, the nuclei have to be put in fixed positions. I have chosen to use experimental bond lengths and bond angles when performing calculations on molecules.
+\subsection{Convergence}
+Convergence of the method is done by a simple test of the difference between the fock-energies between two consecutive iterations. The threshold for convergence is set to $\sum_{i=1}^{N_{\text{basis functions}}} E_{f, i}/N < 10^{-8}$. The method does not always converge. This is specially the case with large basis sets such as 6-311G, and with non-equilibrium atom configurations, such as when performing energy minimization to find the equilibrium energy.
+
+\section{Systems to be modeled}
+
+\subsection{Atoms}
+
+\subsection{Homonuclear diatomic molecules}
+
+\subsection{Molecules of two species}
+When performing HF-calculations on molecules, the nuclei have to be put in fixed positions. I have chosen to use experimental bond lengths and bond angles when performing calculations on molecules. In addition, i use a rough scheme for finding the Hartree-Fock equilibrium configuration for H$_2$O, by calculating the energy on a $(r, \theta)$-grid to find the lowest energy. I also look at how the energy changes when one paramenter $r$ or $\theta$ is changed, while the other is kept in its equilibrium position. This is just to show the concept. To do any serious attempts on finding the equilibrium configuration, a proper minimization scheme such as conjagate gradients should be used. This hasnot been the aim of my work on this project. The code is not sufficiently efficient for a energy minimization scheme to be attainable for the SiO$_2$ molecule on a regular desktop computer. 
+
+
+
+
 
 \begin{table}
 \caption{Spatial configuration for molecule calculations. Lengths are in atomic units, angles are in degrees.}
@@ -248,14 +228,31 @@ Molecule & Bond length & Bond angle \\
 $\mbox{H}_2$ & 1.40 & N/A \\
 $\mbox{Be}_2$ & 4.63 & N/A \\
 $\mbox{H}_2\mbox{O}$ & 1.809 & 104.5 \\
-$\mbox{SiO}_2$ & 
+$\mbox{SiO}_2$ & 3.062 & 144 \\
 \end{tabular}
 \end{table}  
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \part{Results \& Discussion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Tables \ref{tb:energy_hydrogenlike}, \ref{tb:energy_sto3g}, \ref{tb:energy_sto6g}, \ref{tb:energy321g431g} shows ground state energies with hydrogen-like basis functions, STO-3G, STO-6G and 3-21G \& 4-31G, respectively. The general picure is that increasing the number of basis functions lowers the ground state energy, i.e. takes us closer to the experimental values. 
+
+\section{Ground state energies}
+\begin{table}[h!tb]
+\caption{HF-energies with hydrogen-like basis functions}
+\label{tb:energy_hydrogenlike}
+\begin{tabular}[c]{c|c|c}
+System & $E_{HF}$ & $E_{exp}$ \\
+\hline
+He & -2.83359 & -2.904 \\
+Be & -14.515 & -14.67
+\end{tabular}
+\end{table}
 
 \begin{table}[h!tb]
 \caption{HF-energies (in Hartrees) with STO-3G basis}
+\label{tb:energy_sto3g}
 \begin{tabular}[c]{c|c|c}
 System & $E_{HF}$ & $E_{exp}$ \\
 \hline
@@ -268,6 +265,7 @@ $\mbox{Be}_2$ & -28.6988 & insert \\
 
 \begin{table}[h!tb]
 \caption{HF-energies (in Hartrees) with STO-6G basis}
+\label{tb:energy_sto6g}
 \begin{tabular}[c]{c|c|c}
 System & $E_{HF}$ & $E_{exp}$ \\
 \hline
@@ -280,6 +278,7 @@ $\mbox{Be}_2$ & -29.0015 & insert \\
 
 \begin{table}[h!tb]
 \caption{HF-energies (in Hartrees) with 3-21G and 4-31G basis}
+\label{tb:energy321g431g}
 \begin{tabular}[c]{c|c|c|c}
 System & 3-21G & 4-31G & $E_{\mbox{exp}}$ \\
 \hline
@@ -289,26 +288,151 @@ $\mbox{H}_2\mbox{O}$ & -75.5854 & -75.9074 & insert \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[h!tb]
-\includegraphics[width=0.45\textwidth]{./figures/H2Odensity_431g.pdf}
-\caption{Electron density for H$_2$O with 4-31G basis functions on all atoms}
+\subsection{Energy minimization with respect to particle configuration}
+Figure \ref{fig:eangularh2o} shows how the energy depends on the bond angle for H$_2$O, while figure \ref{fig:distanceh2o} shows how it depends on the bond distance. The distance plot uses the angle that was found when optimizing the bond angle. In principle, one can do this over and over to get more precise results. I used the experimental value as input, and then found as a first approximation for the Hartree-Fock configuration for H$_2$O with a 4-31G basis set that:
+\begin{align}
+r = 1.79 \\
+\theta = 111^{\circ}
+\end{align}
+The same parameters calculated for 3-21G are:
+\begin{align}
+r =  1.83\\
+\theta = 107^{\circ}
+\end{align}
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{figures/H2O_angular_energy.pdf}
+\caption{Energy of H$_2$O plotted against the bond angle for two different basis sets, using $r=1.809$.}
+\label{fig:eangularh2o}
 \end{figure}
 
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{figures/H2O_distance_energy.pdf}
+\caption{Energy of H$_2$O plotted against the bond distance, using $\theta=111^\circ$ for 4-31G and 107 for 3-21G. The divergent behavior for long distances is because the Hartree-Fock solver did not converge.}
+\label{fig:distanceh2o}
+\end{figure}
+
+An immidiate reaction to these results, is that the energy difference du to chage of basis, is an order of magnitude larger than the energy differences due to substantial changes in the nuclei configuration. We also see that the radial potential is stronger than the angular. This probably explains why H-O-H bending absorbs electromagnetic radiation at a higher freqency than O-H stretching \cite{Wikipedia}.
+
+Just for a proof-of-concept, I include a grid-plot of energy as a function of both bond angle and bond distance, which is figure \ref{fig:configh2o}.
+
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{figures/H2Oconfig_321g.pdf}
+\caption{Energy as a function of nuclei configuration for H$_2$O with a 3-21G basis. The plot is slightly interpolated, and is derived from a 10x10 point grid in $r$ and $\theta$.}
+\label{fig:configh2o}
+\end{figure}
+
+
+\section{Particle densities}
+
 \begin{figure}[h!tb]
-\includegraphics[width=0.45\textwidth]{./figures/H2density_sto3g.pdf}
+\includegraphics[width=0.5\textwidth]{./figures/H2density_sto3g.pdf}
 \caption{Electron density for H$_2$ with STO3G basis functions on all atoms}
 \end{figure}
 
-\subsection{Implementation efficiency}
-Almost all the time is spent calculating integrals over primitives. Therefore, it is valid to question whether one shold use contracted orbitals, and not just optimize coefficients for all the primitives. (This probla has some good expanation).
+\begin{figure}[h!tb]
+\includegraphics[width=0.5\textwidth]{./figures/Be2density_sto3g.pdf}
+\caption{Electron density for Be$_2$ with STO-3G basis functions on all atoms}
+\end{figure}
 
+\begin{figure}[h!tb]
+\includegraphics[width=0.5\textwidth]{./figures/Ardensity_321g.pdf}
+\caption{Electron density for Ar with 3-21G basis functions on all atoms}
+\end{figure}
+
+\begin{figure}[h!tb]
+\includegraphics[width=0.5\textwidth]{./figures/Nedensity_321g.pdf}
+\caption{Electron density for Ne with 3-21G basis functions on all atoms}
+\end{figure}
+
+\begin{figure}[h!tb]
+\includegraphics[width=0.5\textwidth]{./figures/H2Odensity_431g.pdf}
+\caption{Electron density for H$_2$O with 4-31G basis functions on all atoms}
+\end{figure}
+\begin{figure}[h!tb]
+\includegraphics[width=0.5\textwidth]{./figures/H2Odensity_321g.pdf}
+\caption{Electron density for H$_2$O with 3-21G basis functions on all atoms}
+\end{figure}
+
+\begin{figure}[h!tb]
+\includegraphics[width=0.5\textwidth]{./figures/SiO2density_321g.pdf}
+\caption{Electron density for SiO$_2$ with 3-21G basis functions on all atoms. This is just an illustration of Hartree-Fock used on silicon dioxide. The configuration used is $\theta=144$ and $r = 3.062$ a.u. The energy caculated in this simulation in -3.08609 Hartree}
+\end{figure}
+
+\section{Discussion and interpretations}
+
+\subsection{SiO$_2$}
+As it turns out, performing Hartree-Fock calculations on the SiO$_2$ molecule is not trivial. Silicon dioxide is mainly found in various crystal structures, where the equilibrium configuration is determined by the details of that crystal structure. The equilibrium configuration of one particular aton will thus be deremined by the presence of other atoms i a crystal. 
+
+\subsection{About densities for atoms and molecules}
+As can be seen from the density plots, the distribution of electron density varies substantially. For atoms, it is very localised near the nucleus. For H$_2$, the density is rather distributed both among the nuclei, but also in between the nuclei. We can conclude that the covalent bond in the hydrogen bond is strong. For the beryllium molecule, there are two very distinct peaks at the two nuclei, which indicates weaker bond than for the hydrogen atom. For water and silicon dioxide, we see another qualitatively different picture, where almost all electron desity is localized near one of the nuclei, O and Si respectively. 
+
+\subsection{Bond enthalpies for homonuclear molecules}
+In the last section, I suggested that the bond energy is higher for the hydrogen molecule than for the beryllium molecule by looking qualitatively at the density plots. Chemists call this energy the bond enthalpy, and according to \cite{lide2004crc}, the bond enthalpy for Be-Be in Be$_2$ is 59 kJ/mol, while for H-H in H$_2$ it is 435.990 kJ/mol. It is of course not certain that it is the shape of the density distribution that couses this, but it seems reasonable. For Be$_2$, this is probably only interesting for theoretical purposes, as Beryllium does not like to form Be$_2$.
+
+
+
+\subsection{Use of contracted basis sets}
+Almost all the cpu-time is spent calculating integrals over primitives. This calculation is of order seconds or minutes on a desktop computer for systems of 2-3 particles. The self-consistent linear algebra problem to be solved after the integrals is done in much less than a second. Therefore, it is valid to question whether one shold use contracted orbitals, and not just optimize coefficients for all the primitives. The cpu-time would be the same, since all primitives has to be combined for all integrals. A possible reason for using contracted orbitals, is that it makes it easier for the HF-method to converge. We see already for the 6-311G basis set for water, that convergence problems occur. The alternative to doing a 6-311G would be 11 individual orbitals, insted of 4 contracted, which would make convergence even harder. 
+
+
+\subsection{Perspectives for future work}
+It would be interesting to be able to look at bigger systems. In particular, it would be interesting to look at the behavior of the particle density of one molecule in the presence of another molecule or atom. This can for example give a better understanding of how silicon dioxide in crystal form behaves in the presence of water and vice versa. This requires the ability to look at larger systems, preferably periodic, and thus require parallellization of the code, and substantial rewriting to improve efficiency. 
 
 
 \begin{appendices}
-\section{Terms}
-\subsection{Unitary transformation}
-A unitary transformation is a transformation that preserves the inner product of two vectors. A unitary matrix has the property $U^*U = I$. 
+Here follows what didnt fit into the main text, but is still important to answer the exercises given in the project.
 
+\subsection{The Slater determinant}
+Since electrons are indistinguishable, the Hamiltonian commutes with the particle-exchange operator $P_{ij}$:
+\begin{equation}
+	\Pvec_{ij}\Psi(\xvec_1, \xvec_2, ..., \xvec_i, ..., \xvec_j, ... \xvec_N) = \Psi(\xvec_1, \xvec_2, ..., \xvec_j, ..., \xvec_i, ... \xvec_N)
+\end{equation}
+
+The eigenvalue of $P$ is $-1$ (experimental) for fermions. We are working with an independent-particle Hamiltonian, so the electron state can be written as a product of single-electron states:
+\begin{equation}
+	\Psi(\xvec_1, ..., \xvec_N) = \psi_1(\xvec_1)\cdots\psi_N(\xvec_N)
+\end{equation}
+
+Many-electron states are required to be antisymmetrical with respect to the particle exchange. We assume the many-body elevtronic state to take form of an anti-symmetrized sum of permutations of the single-particle wave function. 
+
+\begin{equation}
+	\Psi_{AS} (\xvec_1, ..., \xvec_N) = \frac{1}{\sqrt{N!}} \sum_\mb{P} \epsilon_P \mb{P} \psi_1(\xvec_1) \cdots \psi_N(\xvec_N)
+\end{equation}
+
+This is known as a slater determinant.
+
+\section{Bases and transformations}
+We start out by using spin-orbitals $\psi_k$ as a basis for our approximation to the many-body electronic wave function. We assume the basis functions are orthonormal, i.e. $\langle \psi_i, \psi_j \rangle = \delta_{ij}$. We can construct a new basis of spin-orbitals by applying a unitary transformation, given by a unitary matrix $\mb{C}$. Since unitary matrices preserve inner products, then the orthonormality property of tha basis is preserved through the unitary transformation. 
+
+
+Let us then look at the relation between the slater determinant of $\{ \psi\}$ and that of $\{\psi'\}$:
+We start by defining a matrix $\mb{M}$ as
+\begin{equation}
+	M_{ij} =\frac{1}{\sqrt{N!}} \psi_j(\xvec_i)
+\end{equation}
+
+We want to show that the Slater determinant constructed from the spin orbitals $\{\psi'\}$ can be written as the determinant of the matrix product $\mb{C}\mb{M}$. Remember $\det(AB) = \det(BA) = \det(BA^T)$, so we can work with $\mb{M}'=\mb{M}\mb{C^T}$.
+
+If we write out this product, we find:
+\begin{equation}
+	(MC^T)_{ij} = \sum_{k} M_{ik} C_{jk}
+\end{equation}
+\begin{equation}
+	= \sum_{k}\frac{1}{\sqrt{N!}}C_{jk}\psi_k(\xvec_i)
+\end{equation}
+
+We originally assumed $C$ to be taking $\{ \psi\}$ to $\{\psi'\}$, so:
+\begin{equation}
+	\psi_k' = \sum_{l=1}^N C_{kl} \psi_l
+	\label{eq:basis_change}
+\end{equation}
+Which means
+\begin{equation}
+(MC^T)_{ij} = \frac{1}{\sqrt{N!}} \psi_j'(x_i)
+\end{equation}
+The determinant of this matrix will be the same as the Slater determinant constructed from the new basis $\{\psi'\}$.
+
+Now we want to find the relation between $\det{M}$ and $\det{M'}$. They are different by a factor of $\det{C^T} = \det{C}$. Since $C$ is unitary, $|\det C| = 1$.
 \end{appendices}
 
 

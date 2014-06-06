@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-HartreeFockSolver::HartreeFockSolver(ElectronicSystem *system) : electronicSystem(system), convergenceCriterion(1e-8)
+HartreeFockSolver::HartreeFockSolver(ElectronicSystem *system) : electronicSystem(system), convergenceCriterion(1e-8), m_energy(0)
 {
     std::cout << "Adding system " << system->str().c_str() << " to solver " << std::endl;
     setupQ();
@@ -17,7 +17,7 @@ HartreeFockSolver::HartreeFockSolver(ElectronicSystem *system) : electronicSyste
     std::cout << "Printed matrices" << std::endl;
 }
 
-void HartreeFockSolver::solve(int maxIterations)
+double HartreeFockSolver::solve(int maxIterations)
 {
     std::cout << "In solver" << std::endl;
 
@@ -28,6 +28,7 @@ void HartreeFockSolver::solve(int maxIterations)
         advance();
         //printMatrices();
     }
+    return m_energy;
 }
 
 void HartreeFockSolver::advance()
@@ -43,6 +44,7 @@ void HartreeFockSolver::advance()
     coefficientMatrix = Ctmp.submat(0, 0, n-1, numK-1);
     setupP();
     double energy = calcEnergy();
+    m_energy = energy;
     std::cout << "Energy" << std::endl << energy << std::endl;
     /*std::cout << "Fock energies" << std::endl << fockEnergies << std::endl;
     std::cout << "Coefficient Matrix" << std::endl << coefficientMatrix << std::endl;

@@ -8,7 +8,7 @@ class HartreeFockSolver
 {
 public:
     HartreeFockSolver(ElectronicSystem* system);
-    void solve(int);
+    double solve(int);
 
 protected:
     void advance();
@@ -32,6 +32,7 @@ protected:
     arma::mat uncoupledMatrix;
     arma::mat h;
     arma::field<arma::mat> coupledMatrix;
+    double m_energy;
 };
 
 #endif // HARTREEFOCKSOLVER_H

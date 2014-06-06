@@ -14,7 +14,6 @@ TurboMoleParser::TurboMoleParser(char *filename)
 
 TurboMoleParser::~TurboMoleParser()
 {
-    std::cout << "Destructing parser" << std::endl;
     m_inFile.close();
 }
 
@@ -50,15 +49,13 @@ void TurboMoleParser::createContracted(arma::vec nucleusPosition)
             m_inFile.getline(buf, 256);
             m_inFile.getline(buf, 256);
             m_inFile.getline(buf, 256);
+
             // From here is the information on the basis
             m_inFile.getline(buf, 256);
             while (!startswith(buf, "*")) {
                 s << buf;
                 s >> numBasisFunctionsInContracted;
-                std::cout << numBasisFunctionsInContracted << " Basis functions in contracted" << std::endl;
                 s >> orbitalType;
-                std::cout << orbitalType << " Orbitaltype" << std::endl;
-
 
                 switch (orbitalType) {
                 case 's':
@@ -71,7 +68,6 @@ void TurboMoleParser::createContracted(arma::vec nucleusPosition)
                         s >> coefficient;
                         Primitive primitive(coefficient, 0, 0, 0, exponent, nucleusPosition);
                         contracted.addPrimitive(primitive);
-                        std::cout << "Exponent " << exponent << " Coefficient " << coefficient << std::endl;
                     }
                     m_contracted.push_back(contracted);
                     m_inFile.getline(buf, 256);
