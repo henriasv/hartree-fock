@@ -31,13 +31,12 @@ We apply the restricted Hartree-Fock method (RHF) to several atomic and molecula
 
 
 \part{Introduction}
-The goal of this project is to perform Hartree-Fock computations in order to find an optimal basis for the single particle wave-functions for Helium, Beryllium and Neon.
-
+Hartree-Fock theory is an approach to the many-electron problem. It is widely used for finding an approximate wave function of a quantum mechanical system. Hartree-Fock calculations yield surprisingly good results with respect to ground state energies, when one takes into account that the coloumb-interaction between the electrons are done in a mean-field way. In this project, we study how different atomic and molecular systems behave within the Hartree-Fock approximation. We will look at He and Be atoms to make a first implementation of a HF-solver with atomic orbitals, and then move on to Gaussian Type Orbitals (GTO's). With GTO's, we will study more complicate systems, such as the water molecule. Our main aim is to bechmark s HF-solver against known ground state energies for various systems, but we will also look at equlibrium configurations and the actual electron distribution for selected systems. 
 %%%%%%%%%%%%%%%%%%%%%%%
 \part{Theory \& Methods}
 %%%%%%%%%%%%%%%%%%%%%%%
 \section{The Hartree-Fock method}
-The Hartree-Fock (HF) method is a method to approximate and solve the time-independent Schrodinger equation, $H\psi = E\psi$. 
+Here is a brief overview of the Hartree-Fock method. I will go into details on how to actually find optimal functions to minimize the \emph{Hartree-Fock functional}. 
 \subsection{Approximations}
 There are five main approximations in the Hartree-Fock method:
 \begin{itemize}
@@ -98,6 +97,7 @@ In addition, the sum of equation \ref{eq:hfsum} now goes to $\frac{N}{2}$, which
 		\sum_\gamma^{N/2} h_{\alpha\gamma}^{HF} C_{k\gamma} = \epsilon_k S_{k\alpha}C_{k\alpha}
 	\label{eq:hfsumfinal}
 \end{equation}
+This is effectively the \emph{Roothan equation}.
 
 $h^{HF}$ gives rise to the \emph{Fock matrix}. Almost all the work in the HF-method is to find the Fock matrix. From there on, we have a self consistent set of equations, which can be solved iteratively with standard linear algebra software. I use Armadillo \cite{Sanderson2011} for this project. 
 
@@ -194,36 +194,46 @@ It is common in Hartree-Fock calculations to use so called \emph{contracted basi
 \begin{equation}
 	\varphi_k = \sum_a c_{ka} \phi_a
 \end{equation}
-These contracted basis functions go into the HF-method as $\alpha, \beta, \gamma, \delta$. An integral over contracted basis functions is a sum of integrals of the corresponding primitive basis functions. The expansion coeficients $c_{ka}$ can in principle be found using the hartree fock method, but we shall not look into that. We take the expansion coeficients as given, and get them from EMSL Basis Bet Exhange\cite{Schuchardt2007}. We will be using the following basis sets: STO-3G \& STO-6G \cite{Hehre1969,Hehre1970}, 3-21G \& 4-31G \cite{binkley1980self,gordon1982basis}. The citations of basis sets are done as instructed on EMSL Basis Set Exchange.
+These contracted basis functions go into the HF-method as $\alpha, \beta, \gamma, \delta$. An integral over contracted basis functions is a sum of integrals of the corresponding primitive basis functions. The expansion coeficients $c_{ka}$ can in principle be found using the hartree fock method, but we shall not look into that. We take the expansion coeficients as given, and get them from EMSL Basis Bet Exhange\cite{Schuchardt2007}. We will be using the following basis sets: STO-3G \& STO-6G \cite{Hehre1969,Hehre1970}, 3-21G \& 4-31G \cite{Krishnan1980,gordon1982basis}. The citations of basis sets are done as instructed on EMSL Basis Set Exchange.
 
 \subsection{Hydrogen-like basis functions}
-As a first step to test the HF-method, we implemented. Hydrogen-like basis functions. These functions do not need contraction. In addition they are orthogonal, which means we don't need the overlap matrix in the Roothan equation. We used 1s, 2s, 3s, and 4s orbitals and checked the method against known energies for the Helium and Beryllium atoms. 
+As a first step to test the HF-method, I implemented Hydrogen-like basis functions. These functions do not need contraction. In addition they are orthogonal, which means we don't need the overlap matrix in the Roothan equation. I used 1s, 2s, 3s, and 4s orbitals and checked the method against known energies for the Helium and Beryllium atoms. 
 
 \section{Numerical implementation}
-The restricted Hartree-Fock method is implemented in a c++ program. We use basis sets from (BasisSetExchange) with the normalization factor (). 
-Primitive integrals are verified with unit tests that can be found in the code.
-The code has been implemented with a focus on robustness rather than efficiency, so the calculations are rather slow. Typical time spent on one Intel i5 cpu-core is 10 seconds for the H$_2$O molecule with a 4-31G basis set. The code for the HF-solver is available on github: \url{https://github.com/henriasv/hartree-fock}.
+I have implemented the restricted Hartree-Fock (RHF) method in a c++ program. The program can use arbitrary basis sets, as long as the based on gaussian primitives. The current implementation support s and p orbitals. I have are verified that integrals over Gaussian Primitives are correct with unit tests that can be found in the code. The code has been implemented with a focus on robustness rather than efficiency, so the calculations are rather slow. Typical time spent on one Intel i5 cpu-core is 10 seconds for the H$_2$O molecule with a 4-31G basis set. The code for the HF-solver is available on github: \url{https://github.com/henriasv/hartree-fock}.
 
 \subsection{Convergence}
-Convergence of the method is done by a simple test of the difference between the fock-energies between two consecutive iterations. The threshold for convergence is set to $\sum_{i=1}^{N_{\text{basis functions}}} E_{f, i}/N < 10^{-8}$. The method does not always converge. This is specially the case with large basis sets such as 6-311G, and with non-equilibrium atom configurations, such as when performing energy minimization to find the equilibrium energy.
+Convergence of the method is done by a simple test of the difference between the fock-energies between two consecutive iterations. The threshold for convergence is set to $\sum_{i=1}^{N_{\text{basis functions}}} E_{f, i}/N < 10^{-8}$. The method does not always converge. This is specially the case with large basis sets and with atom configurations that is far from equilibrium, such as when performing energy minimization to find the equilibrium energy. All results presented in this report are of course from calculations that converged, unless they are commented to be non-convergent.
+
+\subsection{Particle densities}
+In addition to calculation the energy, we can find the electron density:
+\begin{equation}
+	\rho(\rvec) = \rho(\rvec_1) = \int \dd \rvec_2 ... \dd \rvec_N |\Psi(\rvec_1, ..., \rvec_N)|^2
+\end{equation}
+In the Hartree-Fock approximation this becomes:
+\begin{equation}
+	\rho(\rvec) = \sum_{i=1}^{N}|\psi_i(\rvec)|^2
+\end{equation}
+This equation will be used to plot energy densities for several systems. 
 
 \section{Systems to be modeled}
 
 \subsection{Atoms}
+I perform energy calculations on the He, Be, Ne and Ar atoms, and desity calculations for Ne and Ar. These are straightforward in the sense that just the basis set has to be determined. 
 
 \subsection{Homonuclear diatomic molecules}
+I find the energy and electron density for H$_2$ and Be$_2$ with a particle configuration found in literature. 
 
 \subsection{Molecules of two species}
-When performing HF-calculations on molecules, the nuclei have to be put in fixed positions. I have chosen to use experimental bond lengths and bond angles when performing calculations on molecules. In addition, i use a rough scheme for finding the Hartree-Fock equilibrium configuration for H$_2$O, by calculating the energy on a $(r, \theta)$-grid to find the lowest energy. I also look at how the energy changes when one paramenter $r$ or $\theta$ is changed, while the other is kept in its equilibrium position. This is just to show the concept. To do any serious attempts on finding the equilibrium configuration, a proper minimization scheme such as conjagate gradients should be used. This hasnot been the aim of my work on this project. The code is not sufficiently efficient for a energy minimization scheme to be attainable for the SiO$_2$ molecule on a regular desktop computer. 
-
-
+When performing HF-calculations on molecules, the nuclei have to be put in fixed positions. I have chosen to use experimental bond lengths and bond angles when performing calculations on molecules. The values that I have used can be found in table \ref{tb:configuration}. In addition, I use a rough scheme for finding the Hartree-Fock equilibrium configuration for H$_2$O, by calculating the energy on a $(r, \theta)$-grid to find the lowest energy. I also look at how the energy changes when one paramenter $r$ or $\theta$ is changed, while the other is kept in its equilibrium position. This is just to show the concept. To do any serious attempts on finding the equilibrium configuration, a proper minimization scheme such as conjagate gradients should be used. This has not been the aim of my work on this project. The code is not sufficiently efficient for a energy minimization scheme to be attainable for the SiO$_2$ molecule on a regular desktop computer. I also calculate the electron density for both SiO$_2$ and H$_2$O.
 
 
 
 \begin{table}
-\caption{Spatial configuration for molecule calculations. Lengths are in atomic units, angles are in degrees.}
+\caption{Spatial configuration for molecule calculations. Lengths are in atomic units, angles are in degrees. Values for Be$_2$ are taken from \cite{hogberget2013quantum}. SiO$_2$-values are taken for $\alpha$-quartz from \cite{wiberg2001holleman}. H$_2$O-values are from \cite{thijssen2007computational}.}
+\label{tb:configuration}
 \begin{tabular}[c]{c|c|c}
-Molecule & Bond length & Bond angle \\
+Molecule & Bond length [a.u.] & Bond angle $[^{\circ}]$ \\
 \hline
 $\mbox{H}_2$ & 1.40 & N/A \\
 $\mbox{Be}_2$ & 4.63 & N/A \\
@@ -236,7 +246,7 @@ $\mbox{SiO}_2$ & 3.062 & 144 \\
 \part{Results \& Discussion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Tables \ref{tb:energy_hydrogenlike}, \ref{tb:energy_sto3g}, \ref{tb:energy_sto6g}, \ref{tb:energy321g431g} shows ground state energies with hydrogen-like basis functions, STO-3G, STO-6G and 3-21G \& 4-31G, respectively. The general picure is that increasing the number of basis functions lowers the ground state energy, i.e. takes us closer to the experimental values. 
+Tables \ref{tb:energy_hydrogenlike}, \ref{tb:energy_sto3g}, \ref{tb:energy_sto6g} and \ref{tb:energy321g431g} show ground state energies with hydrogen-like basis functions, STO-3G, STO-6G and 3-21G \& 4-31G, respectively. The general picure is that increasing the number of basis functions lowers the ground state energy, i.e. takes us closer to the experimental values. Experimental ground state energies for He, Be and $H_2$ are taken from the project text. Values for Be$_2$, Ne and Ar are taken from \cite{hogberget2013quantum}. H$_2$O-vaues are from \cite{Feller1987}.These eneriges might or might not be real experimental values. They can also be the best simulation results from the literature.
 
 \section{Ground state energies}
 \begin{table}[h!tb]
@@ -256,10 +266,10 @@ Be & -14.515 & -14.67
 \begin{tabular}[c]{c|c|c}
 System & $E_{HF}$ & $E_{exp}$ \\
 \hline
-He & -2.80778 & insert \\
-Be & -14.3519 & insert \\
-$\mbox{H}_2$ & -1.11671 & insert \\
-$\mbox{Be}_2$ & -28.6988 & insert \\
+He & -2.80778 & -2.904  \\
+Be & -14.3519 & -14.67 \\
+$\mbox{H}_2$ & -1.11671 & -1.175 \\
+$\mbox{Be}_2$ & -28.6988 & -29.3385 \\
 \end{tabular}
 \end{table}
 
@@ -269,10 +279,10 @@ $\mbox{Be}_2$ & -28.6988 & insert \\
 \begin{tabular}[c]{c|c|c}
 System & $E_{HF}$ & $E_{exp}$ \\
 \hline
-He & insert & insert \\
-Be & -14.5034 & insert \\
-$\mbox{H}_2$ & insert & insert \\
-$\mbox{Be}_2$ & -29.0015 & insert \\
+He & insert & -2.904 \\
+Be & -14.5034 & -14.67 \\
+$\mbox{H}_2$ & insert & -1.175 \\
+$\mbox{Be}_2$ & -29.0015 & -29.3385 \\
 \end{tabular}
 \end{table}
 
@@ -284,7 +294,7 @@ System & 3-21G & 4-31G & $E_{\mbox{exp}}$ \\
 \hline
 Ne & -127.804 & insert & -128.9383 \\
 Ar & -524.343 &insert & -527.544 \\
-$\mbox{H}_2\mbox{O}$ & -75.5854 & -75.9074 & insert \\
+$\mbox{H}_2\mbox{O}$ & -75.5854 & -75.9074 & -76.438 \\
 \end{tabular}
 \end{table}
 
