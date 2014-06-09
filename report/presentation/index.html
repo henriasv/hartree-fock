@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title> Hartree-Fock calculations on atoms and molecules </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+			<link rel="stylesheet" href="../reveal.js/css/reveal.min.css">
+		<link rel="stylesheet" href="../reveal.js/css/theme/default.css" id="theme">
+		<link rel="stylesheet" href="../presentable/dist/presentable.min.css">
+</head>
+	<body>
+<div class="reveal">
+	<div class="slides" style="background-color: 'grey'">
+		<section>
+			<h2> Hartree-Fock calculations on atoms and molecules</h2>
+		</section>
+
+		<section id="tableofcontents">
+			<h2>Table of Contents</h2>
+			<nav id="presentable-toc" class="revealjs"></nav>
+		</section>
+
+		<section>
+			<h2> Introduction </h2>
+		</section>
+
+		<section>
+		<section>
+			<h2> Hartree-Fock theory </h2>
+			<table class="reveal">
+				<td style="text-align: left;"><ul>
+					<li>Born-Oppenheimer </li>
+					<li>Linear combination soliution to the Schrodinger equation</li>
+					<li> Energy eigenfunctions approximated as single slater determinants </li>
+					<li> Mean field approximation for electron coloumb interactions </li>
+				</ul></td>
+			</table>
+		</section>
+			<section>
+				<h2> The Hartree-Fock Functional </h2>
+			<p> Hartree-Fock theory is about finding funcitons to minimize the Hartree-fock functional </p>
+			
+			\[
+			E[\Phi] = \sum_{\mu = 1}^N \langle \mu |h|\mu \rangle + \frac{1}{2} \sum_{\mu = 1}^N\sum_{\nu=1}^N \left[ \langle \mu\nu |\frac{1}{r_{ij}}| \mu\nu\rangle - \langle \mu\nu |\frac{1}{r_{ij}}| \nu\mu\rangle \right]
+			\]
+
+			<p> Our aim is to minimize this funcitonal by finding the optimal basis funcitons $\mu, \nu$. 
+			</section>
+
+			<section>
+				<h2> Roothans equation </h2>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h2> Implementation </h2>
+			</section>
+			<section>
+				<h2> Gaussian GTO's</h2>
+			</section>
+			<section> 
+				<h2> Contracted basis funcions </h2>
+			</section>
+			<section>
+				<h2> Integrals </h2>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h2> Systems </h2>
+			</section>
+			<section>
+				<h2> Atoms </h2>
+			</section>
+			<section>
+				<h2> Diatomic molecules </h2>
+			</section>
+			<section>
+				<h2> $\mbox{H}_2\mbox{O}$ and $\mbox{SiO}_2$ </h2>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h2> Results </h2>
+			</section>
+			<section>
+				<h2>Ground state energies for atoms and molecules</h2>
+			</section>
+			<section> 
+				<h2>Equilibrium configurations </h2>
+				<img src="../figures/H2Oconfig_321g.pdf" style="background-color:white;">
+			</section>
+			<section>
+				<h2> One-dimensional approach </h2>
+				<table class="reveal">
+				<td><img src="../figures/H2O_angular_energy.pdf" style="background-color:white;"></td>
+				<td><img src="../figures/H2O_distance_energy.pdf" style="background-color:white;"></td>
+			</table>
+			</section>
+			<section>
+				<h2> Density plots (1)</h2>
+				<p> Water </p>
+				<table class="reveal">
+					<td><img src="../figures/H2Odensity_321g.pdf" style="background-color:white;"></td>
+					<td><img src="../figures/H2Odensity_431g.pdf" style="background-color:white;"></td>
+				</table>
+			</section>
+			<section>
+				<h2> Density plots (2)</h2>
+				<p>  Noble gases </p>
+				<table class="reveal">
+					<td><img src="../figures/Nedensity_321g.pdf" style="background-color:white;"></td>
+					<td><img src="../figures/Ardensity_321g.pdf" style="background-color:white;"></td>
+				</table>
+			</section>
+			<section>
+				<h2> Density plots (3)</h2>
+				<p>  Diatomic molecules </p>
+				<table class="reveal">
+					<td><img src="../figures/H2density_sto3g.pdf" style="background-color:white;"></td>
+					<td><img src="../figures/Be2density_sto3g.pdf" style="background-color:white;"></td>
+				</table>
+			</section>
+
+		</section>
+
+		<section>
+			<section>
+				<h2> Summary </h2>
+			</section>
+			<section>
+				<h2> Problems for the future </h2>
+			</section>
+		</section>
+
+	</div>
+</div>
+
+<aside id="presentable-icon" class="revealjs">
+    <a title="Table of Contents" href="#tableofcontents">
+        <img alt="Table of Contents" src="../presentable/dist/icons/revealjs.png"/>
+    </a>
+</aside>
+
+<script src="../reveal.js/lib/js/head.min.js"></script>
+<script src="../reveal.js/js/reveal.min.js"></script>
+<script src="../presentable/dist/presentable.min.js"></script>
+
+	<script>
+
+		Reveal.initialize({
+			history: true,
+			transition: 'linear',
+
+			math: {
+				// mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+				config: 'TeX-AMS_HTML-full'
+			},
+
+			dependencies: [
+				{ src: '../reveal.js/lib/js/classList.js' },
+				{ src: '../reveal.js/plugin/math/math.js', async: true },
+				{ src: '../presentable/dist/presentable.min.js', async: true, callback: function() { presentable.toc({framework: "revealjs"}); } }
+			]
+		});
+
+	</script>
+
+
+
+</body>
+
+</html>

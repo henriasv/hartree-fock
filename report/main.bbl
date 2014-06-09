@@ -1,0 +1,105 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem{thijssen2007computational}
+\bibinfo{author}{Thijssen, J.}
+\newblock \emph{\bibinfo{title}{{Computational physics}}}
+  (\bibinfo{publisher}{Cambridge University Press}, \bibinfo{year}{2007}).
+
+\bibitem{Sanderson2011}
+\bibinfo{author}{Sanderson, C.}, \bibinfo{author}{Box, P.~O.} \&
+  \bibinfo{author}{Lucia, S.}
+\newblock \bibinfo{title}{{Armadillo : An Open Source C ++ Linear Algebra
+  Library for Fast Prototyping and Computationally Intensive Experiments
+  Technical Report}}  (\bibinfo{year}{2011}).
+
+\bibitem{helgaker2006}
+\bibinfo{author}{Helgaker, T.}
+\newblock \bibinfo{title}{{Molecular Integral Evaluation The 9th Sostrup Summer
+  School Quantum Chemistry and Molecular Properties}}  (\bibinfo{year}{2006}).
+
+\bibitem{Schuchardt2007}
+\bibinfo{author}{Schuchardt, K.~L.} \emph{et~al.}
+\newblock \bibinfo{title}{{Basis set exchange: a community database for
+  computational sciences.}}
+\newblock \emph{\bibinfo{journal}{Journal of chemical information and
+  modeling}} \textbf{\bibinfo{volume}{47}}, \bibinfo{pages}{1045--52}
+  (\bibinfo{year}{2007}).
+\newblock \urlprefix\url{http://www.ncbi.nlm.nih.gov/pubmed/17428029}.
+
+\bibitem{Hehre1969}
+\bibinfo{author}{Hehre, W.~J.}
+\newblock \bibinfo{title}{{Self-Consistent Molecular-Orbital Methods. I. Use of
+  Gaussian Expansions of Slater-Type Atomic Orbitals}}.
+\newblock \emph{\bibinfo{journal}{The Journal of Chemical Physics}}
+  \textbf{\bibinfo{volume}{51}}, \bibinfo{pages}{2657} (\bibinfo{year}{1969}).
+\newblock
+  \urlprefix\url{http://scitation.aip.org/content/aip/journal/jcp/51/6/10.1063/1.1672392}.
+
+\bibitem{Hehre1970}
+\bibinfo{author}{Hehre, W.~J.}
+\newblock \bibinfo{title}{{Self-Consistent Molecular Orbital Methods. IV. Use
+  of Gaussian Expansions of Slater-Type Orbitals. Extension to Second-Row
+  Molecules}}.
+\newblock \emph{\bibinfo{journal}{The Journal of Chemical Physics}}
+  \textbf{\bibinfo{volume}{52}}, \bibinfo{pages}{2769} (\bibinfo{year}{1970}).
+\newblock
+  \urlprefix\url{http://scitation.aip.org/content/aip/journal/jcp/52/5/10.1063/1.1673374}.
+
+\bibitem{Krishnan1980}
+\bibinfo{author}{Krishnan, R.}, \bibinfo{author}{Binkley, J.~S.},
+  \bibinfo{author}{Seeger, R.} \& \bibinfo{author}{Pople, J.~A.}
+\newblock \bibinfo{title}{{Self-consistent molecular orbital methods. XX. A
+  basis set for correlated wave functions}}.
+\newblock \emph{\bibinfo{journal}{The Journal of Chemical Physics}}
+  \textbf{\bibinfo{volume}{72}}, \bibinfo{pages}{650} (\bibinfo{year}{1980}).
+\newblock
+  \urlprefix\url{http://scitation.aip.org/content/aip/journal/jcp/72/1/10.1063/1.438955}.
+
+\bibitem{gordon1982basis}
+\bibinfo{author}{Gordon, M.~S.}, \bibinfo{author}{Binkley, J.~S.},
+  \bibinfo{author}{Pople, J.~A.}, \bibinfo{author}{Pietro, W.~J.} \&
+  \bibinfo{author}{Hehre, W.~J.}
+\newblock \bibinfo{title}{{The basis sets designated 4--31G ($\nu$) and
+  6--31G$\nu$ $\nu$ in this work contain five d functions rather than the six
+  recommended by J}}.
+\newblock \emph{\bibinfo{journal}{Am. Chem. Soc}}
+  \textbf{\bibinfo{volume}{104}}, \bibinfo{pages}{2797} (\bibinfo{year}{1982}).
+
+\bibitem{hogberget2013quantum}
+\bibinfo{author}{H\o~gberget, J.~r.}
+\newblock \bibinfo{title}{{Quantum Monte-Carlo Studies of Generalized Many-body
+  Systems}}  (\bibinfo{year}{2013}).
+
+\bibitem{wiberg2001holleman}
+\bibinfo{author}{Wiberg, N.}
+\newblock \bibinfo{title}{{Holleman-Wiberg's inorganic chemistry}}.
+\newblock \emph{\bibinfo{journal}{Academic Press, New York}}
+  (\bibinfo{year}{2001}).
+
+\bibitem{Feller1987}
+\bibinfo{author}{Feller, D.}, \bibinfo{author}{Boyle, C.~M.} \&
+  \bibinfo{author}{Davidson, E.~R.}
+\newblock \bibinfo{title}{{One-electron properties of several small molecules
+  using near Hartree–Fock limit basis sets}}.
+\newblock \emph{\bibinfo{journal}{The Journal of Chemical Physics}}
+  \textbf{\bibinfo{volume}{86}}, \bibinfo{pages}{3424} (\bibinfo{year}{1987}).
+\newblock
+  \urlprefix\url{http://scitation.aip.org/content/aip/journal/jcp/86/6/10.1063/1.451999}.
+
+\bibitem{Wikipedia}
+\bibinfo{author}{Wikipedia}.
+\newblock \bibinfo{title}{{Electromagnetic absorption by water}}.
+\newblock
+  \urlprefix\url{http://en.wikipedia.org/wiki/Electromagnetic\_absorption\_by\_water}.
+
+\bibitem{lide2004crc}
+\bibinfo{author}{Lide, D.~R.}
+\newblock \emph{\bibinfo{title}{{CRC handbook of chemistry and physics}}}
+  (\bibinfo{publisher}{CRC press}, \bibinfo{year}{2004}).
+
+\end{thebibliography}

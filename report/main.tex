@@ -28,6 +28,7 @@
 We apply the restricted Hartree-Fock method (RHF) to several atomic and molecular systems. We bechmark a Hartree-Fock solver using known correlation energies, and investigate how different GTO bases, STO-3G, STO-6G, 3-21G and 4-31G influence ground state energies and nuclei configurations.
 \end{abstract}
 \maketitle
+\tableofcontents
 
 
 \part{Introduction}
@@ -43,7 +44,7 @@ There are five main approximations in the Hartree-Fock method:
  \item The Born-Oppenheimer approximation
  \item The solution is a linear combination of basis functions
  \item Each energy eigenfunction is assumed to be describable by a single Slater determinant
- \item The mean field approximation is implied. 
+ \item A mean field approximation is implied. 
 \end{itemize}
 
 The two last approximations are the ones that differentiate the HF method from other similar methods. The HF-method leads us to the Hartree-Fock functional which reads:
@@ -200,12 +201,12 @@ These contracted basis functions go into the HF-method as $\alpha, \beta, \gamma
 As a first step to test the HF-method, I implemented Hydrogen-like basis functions. These functions do not need contraction. In addition they are orthogonal, which means we don't need the overlap matrix in the Roothan equation. I used 1s, 2s, 3s, and 4s orbitals and checked the method against known energies for the Helium and Beryllium atoms. 
 
 \section{Numerical implementation}
-I have implemented the restricted Hartree-Fock (RHF) method in a c++ program. The program can use arbitrary basis sets, as long as the based on gaussian primitives. The current implementation support s and p orbitals. I have are verified that integrals over Gaussian Primitives are correct with unit tests that can be found in the code. The code has been implemented with a focus on robustness rather than efficiency, so the calculations are rather slow. Typical time spent on one Intel i5 cpu-core is 10 seconds for the H$_2$O molecule with a 4-31G basis set. The code for the HF-solver is available on github: \url{https://github.com/henriasv/hartree-fock}.
+I have implemented the restricted Hartree-Fock (RHF) method in a c++ program. The program can parse and use arbitrary basis sets from ESML, as long as they are based on gaussian primitives. The current implementation support s and p orbitals. I have verified that integrals over Gaussian Primitives are correct with unit tests that can be found in the code. The code has been implemented with a focus on robustness rather than efficiency, so the calculations are rather slow. Typical time spent on one Intel i5 cpu-core is 10 seconds for the H$_2$O molecule with a 4-31G basis set. The code for the HF-solver, along with files containing the basis functions I have used, is available on github: \url{https://github.com/henriasv/hartree-fock}.
 
 \subsection{Convergence}
-Convergence of the method is done by a simple test of the difference between the fock-energies between two consecutive iterations. The threshold for convergence is set to $\sum_{i=1}^{N_{\text{basis functions}}} E_{f, i}/N < 10^{-8}$. The method does not always converge. This is specially the case with large basis sets and with atom configurations that is far from equilibrium, such as when performing energy minimization to find the equilibrium energy. All results presented in this report are of course from calculations that converged, unless they are commented to be non-convergent.
+Convergence of the method is done by a simple test of the difference between the fock-energies (eigenvalues of the Roothan-equation) between two consecutive iterations. The threshold for convergence is set to $\sum_{i=1}^{N_{\text{basis functions}}} E_{f, i}/N < 10^{-8}$. The method does not always converge. This is specially the case with large basis sets and with atom configurations that is far from equilibrium, such as when performing energy minimization to find the equilibrium energy. All results presented in this report are of course from calculations that converged, unless they are commented to be non-convergent.
 
-\subsection{Particle densities}
+\section{Electron densities}
 In addition to calculation the energy, we can find the electron density:
 \begin{equation}
 	\rho(\rvec) = \rho(\rvec_1) = \int \dd \rvec_2 ... \dd \rvec_N |\Psi(\rvec_1, ..., \rvec_N)|^2
@@ -246,11 +247,13 @@ $\mbox{SiO}_2$ & 3.062 & 144 \\
 \part{Results \& Discussion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Tables \ref{tb:energy_hydrogenlike}, \ref{tb:energy_sto3g}, \ref{tb:energy_sto6g} and \ref{tb:energy321g431g} show ground state energies with hydrogen-like basis functions, STO-3G, STO-6G and 3-21G \& 4-31G, respectively. The general picure is that increasing the number of basis functions lowers the ground state energy, i.e. takes us closer to the experimental values. Experimental ground state energies for He, Be and $H_2$ are taken from the project text. Values for Be$_2$, Ne and Ar are taken from \cite{hogberget2013quantum}. H$_2$O-vaues are from \cite{Feller1987}.These eneriges might or might not be real experimental values. They can also be the best simulation results from the literature.
-
 \section{Ground state energies}
+Tables \ref{tb:energy_hydrogenlike}, \ref{tb:energy_sto3g}, \ref{tb:energy_sto6g} and \ref{tb:energy321g431g} show ground state energies with hydrogen-like basis functions, STO-3G, STO-6G and 3-21G \& 4-31G, respectively. All energies are in Hartrees. The general picure is that increasing the number of basis functions lowers the ground state energy, i.e. takes us closer to the experimental values. Experimental ground state energies for He, Be and $H_2$ are taken from the project text. Values for Be$_2$, Ne and Ar are taken from \cite{hogberget2013quantum}. H$_2$O-vaues are from \cite{Feller1987}.These eneriges might or might not be real experimental values. They can also be the best known simulation results from literature.
+
+
+
 \begin{table}[h!tb]
-\caption{HF-energies with hydrogen-like basis functions}
+\caption{HF-energies with hydrogen-like basis functions: 1s, 2s, 3s, 4s.}
 \label{tb:energy_hydrogenlike}
 \begin{tabular}[c]{c|c|c}
 System & $E_{HF}$ & $E_{exp}$ \\
@@ -261,7 +264,7 @@ Be & -14.515 & -14.67
 \end{table}
 
 \begin{table}[h!tb]
-\caption{HF-energies (in Hartrees) with STO-3G basis}
+\caption{HF-energies with STO-3G basis}
 \label{tb:energy_sto3g}
 \begin{tabular}[c]{c|c|c}
 System & $E_{HF}$ & $E_{exp}$ \\
@@ -274,32 +277,32 @@ $\mbox{Be}_2$ & -28.6988 & -29.3385 \\
 \end{table}
 
 \begin{table}[h!tb]
-\caption{HF-energies (in Hartrees) with STO-6G basis}
+\caption{HF-energies with STO-6G basis}
 \label{tb:energy_sto6g}
 \begin{tabular}[c]{c|c|c}
 System & $E_{HF}$ & $E_{exp}$ \\
 \hline
-He & insert & -2.904 \\
+He & -2.84629 & -2.904 \\
 Be & -14.5034 & -14.67 \\
-$\mbox{H}_2$ & insert & -1.175 \\
+$\mbox{H}_2$ & -1.12532 & -1.175 \\
 $\mbox{Be}_2$ & -29.0015 & -29.3385 \\
 \end{tabular}
 \end{table}
 
 \begin{table}[h!tb]
-\caption{HF-energies (in Hartrees) with 3-21G and 4-31G basis}
+\caption{HF-energies with 3-21G and 4-31G basis}
 \label{tb:energy321g431g}
 \begin{tabular}[c]{c|c|c|c}
 System & 3-21G & 4-31G & $E_{\mbox{exp}}$ \\
 \hline
-Ne & -127.804 & insert & -128.9383 \\
-Ar & -524.343 &insert & -527.544 \\
+Ne & -127.804 & -128.356 & -128.9383 \\
+Ar & -524.343 & N/A & -527.544 \\
 $\mbox{H}_2\mbox{O}$ & -75.5854 & -75.9074 & -76.438 \\
 \end{tabular}
 \end{table}
 
-\subsection{Energy minimization with respect to particle configuration}
-Figure \ref{fig:eangularh2o} shows how the energy depends on the bond angle for H$_2$O, while figure \ref{fig:distanceh2o} shows how it depends on the bond distance. The distance plot uses the angle that was found when optimizing the bond angle. In principle, one can do this over and over to get more precise results. I used the experimental value as input, and then found as a first approximation for the Hartree-Fock configuration for H$_2$O with a 4-31G basis set that:
+\section{Energy minimization with respect to particle configuration}
+Figure \ref{fig:eangularh2o} shows how the energy depends on the bond angle for H$_2$O, while figure \ref{fig:distanceh2o} shows how it depends on the bond distance. The distance plot uses the angle that was found when optimizing the bond angle. In principle, one can do this over and over to get more precise results. I used the experimental value as input, and then found as a first approximation for the Hartree-Fock configuration for H$_2$O with a 4-31G basis set:
 \begin{align}
 r = 1.79 \\
 \theta = 111^{\circ}
@@ -321,9 +324,9 @@ r =  1.83\\
 \label{fig:distanceh2o}
 \end{figure}
 
-An immidiate reaction to these results, is that the energy difference du to chage of basis, is an order of magnitude larger than the energy differences due to substantial changes in the nuclei configuration. We also see that the radial potential is stronger than the angular. This probably explains why H-O-H bending absorbs electromagnetic radiation at a higher freqency than O-H stretching \cite{Wikipedia}.
+An immidiate reaction to these results, is that the energy difference due to a change of basis, is an order of magnitude larger than the energy differences due to substantial changes in the nuclei configuration. We also see that the radial potential is stronger than the angular. This probably explains why H-O-H bending absorbs electromagnetic radiation at a higher freqency than O-H stretching \cite{Wikipedia}.
 
-Just for a proof-of-concept, I include a grid-plot of energy as a function of both bond angle and bond distance, which is figure \ref{fig:configh2o}.
+Just for a proof-of-concept, I include a grid-plot of energy as a function of both bond angle and bond distance, which is figure \ref{fig:configh2o}. The plot is surprisingly smooth, so I think a proper minimization scheme would converge quite easily to a very precise configuration $(r, \theta)$.
 
 \begin{figure}
 \includegraphics[width=0.5\textwidth]{figures/H2Oconfig_321g.pdf}
@@ -332,35 +335,45 @@ Just for a proof-of-concept, I include a grid-plot of energy as a function of bo
 \end{figure}
 
 
-\section{Particle densities}
+\section{Electron densities}
+Figures \ref{fig:density1}, \ref{fig:density2}, \ref{fig:density3}, \ref{fig:density4}, \ref{fig:density5} and \ref{fig:density6} show electron densities for selected systems. We see that the distribution of electron density varies substantially among the systems. For atoms, it is very localised near the nucleus. H$_2$ for instance, has a density that is rather distributed among the nuclei \emph{and} in between the nuclei. We can conclude that the covalent bond in the hydrogen bond is strong. For the beryllium molecule, there are two very distinct peaks at the two nuclei, which indicates weaker bond than for the hydrogen atom. For water and silicon dioxide, we see another qualitatively different picture, where almost all electron desity is localized near one of the nuclei, O and Si respectively. 
+
+
 
 \begin{figure}[h!tb]
 \includegraphics[width=0.5\textwidth]{./figures/H2density_sto3g.pdf}
 \caption{Electron density for H$_2$ with STO3G basis functions on all atoms}
+\label{fig:density1}
 \end{figure}
 
 \begin{figure}[h!tb]
 \includegraphics[width=0.5\textwidth]{./figures/Be2density_sto3g.pdf}
 \caption{Electron density for Be$_2$ with STO-3G basis functions on all atoms}
+\label{fig:density2}
 \end{figure}
 
 \begin{figure}[h!tb]
 \includegraphics[width=0.5\textwidth]{./figures/Ardensity_321g.pdf}
 \caption{Electron density for Ar with 3-21G basis functions on all atoms}
+\label{fig:density3}
 \end{figure}
 
 \begin{figure}[h!tb]
 \includegraphics[width=0.5\textwidth]{./figures/Nedensity_321g.pdf}
 \caption{Electron density for Ne with 3-21G basis functions on all atoms}
+\label{fig:density4}
 \end{figure}
 
 \begin{figure}[h!tb]
 \includegraphics[width=0.5\textwidth]{./figures/H2Odensity_431g.pdf}
 \caption{Electron density for H$_2$O with 4-31G basis functions on all atoms}
+\label{fig:density5}
 \end{figure}
+
 \begin{figure}[h!tb]
 \includegraphics[width=0.5\textwidth]{./figures/H2Odensity_321g.pdf}
 \caption{Electron density for H$_2$O with 3-21G basis functions on all atoms}
+\label{fig:density6}
 \end{figure}
 
 \begin{figure}[h!tb]
@@ -371,28 +384,27 @@ Just for a proof-of-concept, I include a grid-plot of energy as a function of bo
 \section{Discussion and interpretations}
 
 \subsection{SiO$_2$}
-As it turns out, performing Hartree-Fock calculations on the SiO$_2$ molecule is not trivial. Silicon dioxide is mainly found in various crystal structures, where the equilibrium configuration is determined by the details of that crystal structure. The equilibrium configuration of one particular aton will thus be deremined by the presence of other atoms i a crystal. 
-
-\subsection{About densities for atoms and molecules}
-As can be seen from the density plots, the distribution of electron density varies substantially. For atoms, it is very localised near the nucleus. For H$_2$, the density is rather distributed both among the nuclei, but also in between the nuclei. We can conclude that the covalent bond in the hydrogen bond is strong. For the beryllium molecule, there are two very distinct peaks at the two nuclei, which indicates weaker bond than for the hydrogen atom. For water and silicon dioxide, we see another qualitatively different picture, where almost all electron desity is localized near one of the nuclei, O and Si respectively. 
+It turns out that performing Hartree-Fock calculations on the SiO$_2$ molecule is not trivial. Silicon dioxide is mainly found in various crystal structures, where the equilibrium configuration is determined by the details of that crystal structure. The equilibrium configuration of one particular aton will thus be deremined by the presence of other atoms i a crystal. Also, I was not able to make the program fast enough to make an energy plot like the one for H$_2$O, but this is possible to do in principle. 
 
 \subsection{Bond enthalpies for homonuclear molecules}
-In the last section, I suggested that the bond energy is higher for the hydrogen molecule than for the beryllium molecule by looking qualitatively at the density plots. Chemists call this energy the bond enthalpy, and according to \cite{lide2004crc}, the bond enthalpy for Be-Be in Be$_2$ is 59 kJ/mol, while for H-H in H$_2$ it is 435.990 kJ/mol. It is of course not certain that it is the shape of the density distribution that couses this, but it seems reasonable. For Be$_2$, this is probably only interesting for theoretical purposes, as Beryllium does not like to form Be$_2$.
-
-
+In the section on electron densities, I suggested that the bond energy is higher for the hydrogen molecule than for the beryllium molecule by looking qualitatively at the density plots. Chemists call this energy the bond enthalpy, and according to \cite{lide2004crc}, the bond enthalpy for Be-Be in Be$_2$ is 59 kJ/mol, while for H-H in H$_2$ it is 435.990 kJ/mol. It is of course not certain that it is the shape of the density distribution that causes this, but it seems reasonable. For Be$_2$, this is probably only interesting for theoretical purposes, as Beryllium does not like to form Be$_2$.
 
 \subsection{Use of contracted basis sets}
-Almost all the cpu-time is spent calculating integrals over primitives. This calculation is of order seconds or minutes on a desktop computer for systems of 2-3 particles. The self-consistent linear algebra problem to be solved after the integrals is done in much less than a second. Therefore, it is valid to question whether one shold use contracted orbitals, and not just optimize coefficients for all the primitives. The cpu-time would be the same, since all primitives has to be combined for all integrals. A possible reason for using contracted orbitals, is that it makes it easier for the HF-method to converge. We see already for the 6-311G basis set for water, that convergence problems occur. The alternative to doing a 6-311G would be 11 individual orbitals, insted of 4 contracted, which would make convergence even harder. 
+Almost all the cpu-time is spent calculating integrals over primitives. This calculation is of order seconds or minutes on a desktop computer for systems of 2-3 particles. The self-consistent linear algebra problem to be solved after the integrals is done in much less than a second. Therefore, it is valid to question whether one shold use contracted orbitals, and not just optimize coefficients for all the primitives. The cpu-time would be the same, since all primitives has to be combined for all integrals. A possible reason for using contracted orbitals, is that it makes it easier for the HF-method to converge. We see already for the 4-31G and 3-21G basis set for water, that convergence problems occur. The alternative to doing a 4-31G would be 20 (4 s-orbitals + (3+1) s-orbitals + (3+1)*3 p-orbitals) individual orbitals, instead of 9 contracted, which would make convergence even harder. 
 
 
 \subsection{Perspectives for future work}
-It would be interesting to be able to look at bigger systems. In particular, it would be interesting to look at the behavior of the particle density of one molecule in the presence of another molecule or atom. This can for example give a better understanding of how silicon dioxide in crystal form behaves in the presence of water and vice versa. This requires the ability to look at larger systems, preferably periodic, and thus require parallellization of the code, and substantial rewriting to improve efficiency. 
+It would be interesting to be able to look at bigger systems. In particular, it would be interesting to look at the behavior of the particle density of one molecule in the presence of another molecule or atom. This can for example give a better understanding of how silicon dioxide in crystal form behaves in the presence of water and vice versa, and also to calculate properties of different crystal forms of silicon dioxide. This requires the ability to look at larger systems, preferably periodic, and thus require parallellization of the code, and substantial rewriting to improve efficiency. 
+
+\bibliography{mendeleybib}
 
 
-\begin{appendices}
-Here follows what didnt fit into the main text, but is still important to answer the exercises given in the project.
 
-\subsection{The Slater determinant}
+\begin{appendix}
+
+\section{The Slater determinant}
+From here on follows what did not fit into the main text. It is here essentially to answer problem 1a in the project text.
+
 Since electrons are indistinguishable, the Hamiltonian commutes with the particle-exchange operator $P_{ij}$:
 \begin{equation}
 	\Pvec_{ij}\Psi(\xvec_1, \xvec_2, ..., \xvec_i, ..., \xvec_j, ... \xvec_N) = \Psi(\xvec_1, \xvec_2, ..., \xvec_j, ..., \xvec_i, ... \xvec_N)
@@ -443,8 +455,8 @@ Which means
 The determinant of this matrix will be the same as the Slater determinant constructed from the new basis $\{\psi'\}$.
 
 Now we want to find the relation between $\det{M}$ and $\det{M'}$. They are different by a factor of $\det{C^T} = \det{C}$. Since $C$ is unitary, $|\det C| = 1$.
-\end{appendices}
+\end{appendix}
 
 
-\bibliography{mendeleybib}
+
 \end{document}

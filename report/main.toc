@@ -1,0 +1,36 @@
+\tocdepth@munge 
+\contentsline {section}{\numberline {}Contents}{1}{}
+\tocdepth@restore 
+\contentsline {part}{I\hspace {1em}Introduction}{1}{}
+\contentsline {part}{II\hspace {1em}Theory \& Methods}{1}{}
+\contentsline {section}{\numberline {I}The Hartree-Fock method}{1}{}
+\contentsline {subsection}{\numberline {A}Approximations}{1}{}
+\contentsline {section}{\numberline {II}Minimizing the Hartree-Fock functional}{2}{}
+\contentsline {section}{\numberline {III}Integral evaluations}{2}{}
+\contentsline {subsection}{\numberline {A}Cartesian GTO's}{2}{}
+\contentsline {subsection}{\numberline {B}Overlap integrals}{3}{}
+\contentsline {subsection}{\numberline {C}Kinetic integrals}{3}{}
+\contentsline {subsection}{\numberline {D}One-electron nuclear attraction integrals (Coulomb)}{3}{}
+\contentsline {subsection}{\numberline {E}Two-electron repulsion integrals (Coulomb)}{3}{}
+\contentsline {subsection}{\numberline {F}Contracted basis functions}{3}{}
+\contentsline {subsection}{\numberline {G}Hydrogen-like basis functions}{4}{}
+\contentsline {section}{\numberline {IV}Numerical implementation}{4}{}
+\contentsline {subsection}{\numberline {A}Convergence}{4}{}
+\contentsline {section}{\numberline {V}Electron densities}{4}{}
+\contentsline {section}{\numberline {VI}Systems to be modeled}{4}{}
+\contentsline {subsection}{\numberline {A}Atoms}{4}{}
+\contentsline {subsection}{\numberline {B}Homonuclear diatomic molecules}{4}{}
+\contentsline {subsection}{\numberline {C}Molecules of two species}{4}{}
+\contentsline {part}{III\hspace {1em}Results \& Discussion}{4}{}
+\contentsline {section}{\numberline {VII}Ground state energies}{5}{}
+\contentsline {section}{\numberline {VIII}Energy minimization with respect to particle configuration}{5}{}
+\contentsline {section}{\numberline {IX}Electron densities}{6}{}
+\contentsline {section}{\numberline {X}Discussion and interpretations}{7}{}
+\contentsline {subsection}{\numberline {A}SiO$_2$}{7}{}
+\contentsline {subsection}{\numberline {B}Bond enthalpies for homonuclear molecules}{8}{}
+\contentsline {subsection}{\numberline {C}Use of contracted basis sets}{8}{}
+\contentsline {subsection}{\numberline {D}Perspectives for future work}{8}{}
+\contentsline {section}{\numberline {}References}{8}{}
+\appendix 
+\contentsline {section}{\numberline {A}The Slater determinant}{9}{}
+\contentsline {section}{\numberline {B}Bases and transformations}{9}{}

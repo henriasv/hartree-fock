@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: main.aux
+The style file: naturemag.bst
+Database file #1: mendeleybib.bib
+Warning--empty journal in Sanderson2011
+Warning--empty journal in helgaker2006
+Warning--empty journal in hogberget2013quantum
+You've used 13 entries,
+            2348 wiz_defined-function locations,
+            1055 strings with 11152 characters,
+and the built_in function-call counts, 4035 in all, are:
+= -- 250
+> -- 100
+< -- 0
++ -- 50
+- -- 25
+* -- 463
+:= -- 469
+add.period$ -- 39
+call.type$ -- 13
+change.case$ -- 11
+chr.to.int$ -- 0
+cite$ -- 16
+duplicate$ -- 390
+empty$ -- 405
+format.name$ -- 30
+if$ -- 805
+int.to.chr$ -- 0
+int.to.str$ -- 13
+missing$ -- 90
+newline$ -- 73
+num.names$ -- 13
+pop$ -- 99
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 75
+stack$ -- 0
+substring$ -- 82
+swap$ -- 343
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 3
+while$ -- 20
+width$ -- 15
+write$ -- 142
+(There were 3 warnings)
