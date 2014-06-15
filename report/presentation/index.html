@@ -63,6 +63,13 @@
 				\]
 				<p> This is a self-consistent equation that resembles a generalized eigenvalue problem. We solve it iteratively with a generalized eigenvalue solver.</p>
 			</section>
+			<section>
+				<h2>The Fock matrix</h2>
+				<p>The elements in the fock matrix looks like:</p>
+				\[
+						h_{\alpha\gamma}^{HF} = \langle\alpha|h|\gamma\rangle + \frac{1}{2}\sum_{a\beta\delta} C_{a\beta}C^*_{a\delta} (2\langle\alpha\beta|\frac{1}{r_{ij}}|\gamma\delta\rangle-\langle\alpha\beta|\frac{1}{r_{ij}}|\delta\gamma\rangle )
+				\]
+			</section>
 		</section>
 
 		<section>
@@ -99,10 +106,10 @@
 				<p>Tools for integral evaluations:</p>
 				<td style="text-align: left;">
 					<ul>
+						<li>Gaussian primitives</li>
 						<li>Hermite coefficients</li>
 						<li>Auxillary Hermite integrals</li>
 						<li>Recurrence relations</li>
-						<li>Gaussian primitives</li>
 						<li>Boys functions</li>
 					</ul>
 				</td>
@@ -254,11 +261,11 @@
 				<td style="text-align: left;">
 					<ul>
 						<li>Hartree-Fock reproduces known atomic and molecular features to good precision</li>
-						<li>Convergence is an issue</li>
 						<li>Qualitative properties of the water molecule are reproduced</li>
 						<li>Hard to find benchmark values for silicon dioxide</li>
+						<li>Convergence is sometimes an issue</li>
 						<li>Hartree-Fock has potential for nice figures</li>
-					</ul>
+					</ul> 
 				</td>
 
 			</section>
@@ -272,7 +279,7 @@
 			<section>
 				<h2> Use of Hartree-Fock </h2>
 				<td style="text-align: left;"><ul>
-					<li>Post Hartree-fock methods</li>
+					<li>Post Hartree-fock methods (Better electron interactions)</li>
 					<li>Starting point for DMC/VMC</li>
 				</ul></td>
 			</section>
