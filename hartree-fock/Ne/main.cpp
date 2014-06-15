@@ -16,7 +16,7 @@ int main()
 
     Nucleus Ne(posNe,10);
 
-    TurboMoleParser parserNe("../../data/basis_sets/Ne_3-21g.txt");
+    TurboMoleParser parserNe("../../data/basis_sets/Ne_4-21g.txt");
 
     std::vector<Contracted> Necontracted = parserNe.returnContracted(posNe);
 
@@ -29,7 +29,8 @@ int main()
     system.addNucleus(Ne);
 
     HFSolver solver(system);
-    solver.solve();
-    solver.dumpDensity2D("/scratch/densityNe_321g.bin", 200, 0, 0, 0.5, 0.5);
+    double energy = solver.solve();
+    std::cout << "Energy " << energy << std::endl;
+    //solver.dumpDensity2D("/scratch/densityNe_321g.bin", 200, 0, 0, 0.5, 0.5);
 }
 

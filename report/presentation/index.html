@@ -8,6 +8,13 @@
 			<link rel="stylesheet" href="../reveal.js/css/reveal.min.css">
 		<link rel="stylesheet" href="../reveal.js/css/theme/default.css" id="theme">
 		<link rel="stylesheet" href="../presentable/dist/presentable.min.css">
+		<style type="text/css">
+		table,th,td
+		{
+			border:1px solid black;
+			padding:15px;
+		}
+		</style>
 </head>
 	<body>
 <div class="reveal">
@@ -50,6 +57,11 @@
 
 			<section>
 				<h2> Roothans equation </h2>
+				<p>When we restrict ourselves to closed-shell systems only, the minimization problem can be written as:</p>
+				\[
+				\mathbf{F} \mathbf{C}_k = \mathbf{\epsilon}_k\mathbf{S} \mathbf{C}_k 
+				\]
+				<p> This is a self-consistent equation that resembles a generalized eigenvalue problem. We solve it iteratively with a generalized eigenvalue solver.</p>
 			</section>
 		</section>
 
@@ -59,24 +71,56 @@
 			</section>
 			<section>
 				<h2> Gaussian GTO's</h2>
+				<p> Functions on the form </p>
+					\[
+					G_a = G_{ikm}(a, \mathbf{r}_A) = x^i_A y^k_A z^m_A e^{-ar^2_A}
+					\]
+				<p> have closed-form product integrals and are therefore favorable for integration-intensive methods.</p>
 			</section>
 			<section> 
 				<h2> Contracted basis funcions </h2>
+				<p> To represent reasonable electron states, several gaussian primitives are contracted to create singel-particle states.</p>
+				\[
+				\varphi_k = \sum_a c_{ka} G_a
+				\]
+				<p> These are the functions to go into Roothans equation </p>
 			</section>
 			<section>
 				<h2> Integrals </h2>
+				<p>The Fock matrix in Roothans equation requires us to calculate some integrals. </p>
+				<td style="text-align: left;"><ul>
+					<li>Overlap integrals (For the overlap matrix, not the fock matrix): $\langle G_a | G_b \rangle$ </li>
+					<li>Electron-nucleus integrals: $\langle G_a | \frac{1}{r} | G_b\rangle$</li>
+					<li>Electron-electron integrals: $\langle G_a G_b | \frac{1}{r} | G_c G_d \rangle$</li>
+				</ul></td>
+			</section>
+			<section>
+				<h2>Integral evaluations</h2>
+				<p>Tools for integral evaluations:</p>
+				<td style="text-align: left;">
+					<ul>
+						<li>Hermite coefficients</li>
+						<li>Auxillary Hermite integrals</li>
+						<li>Recurrence relations</li>
+						<li>Gaussian primitives</li>
+						<li>Boys functions</li>
+					</ul>
+				</td>
 			</section>
 		</section>
 
 		<section>
 			<section>
 				<h2> Systems </h2>
+				<p>We are able to do calculations on closed shell systems.</p>
 			</section>
 			<section>
 				<h2> Atoms </h2>
+				<p>He, Ne, Ar</p>
 			</section>
 			<section>
 				<h2> Diatomic molecules </h2>
+				<p>H$_2$, Be$_2$</p>
 			</section>
 			<section>
 				<h2> $\mbox{H}_2\mbox{O}$ and $\mbox{SiO}_2$ </h2>
@@ -89,40 +133,115 @@
 			</section>
 			<section>
 				<h2>Ground state energies for atoms and molecules</h2>
+				<table style="text-aligne: left;">
+					<tr>
+						<th>System</th>
+						<th>Hydrogen-like</th>
+						<th>3-21G</th>
+						<th>4-31G</th>
+						<th>STO-3G</th>
+						<th>STO-6G</th>
+						<th>Exp</th>
+					</tr>
+					
+					<tr>
+						<td>He</td>
+						<td>-2.83359</td>
+						<td>-</td>
+						<td>-</td>
+						<td>-2.80778 </td>
+						<td>-2.84629</td>
+						<td>-2.904</td>
+					</tr>
+					<tr>
+						<td>Be</td>
+						<td>-14.515</td>
+						<td>-</td>
+						<td>-</td>
+						<td>-14.3519</td>
+						<td>-14.5034</td>
+						<td>-14.67</td>
+					</tr>	
+					<tr>
+						<td>H$_2$</td>
+						<td>-</td>
+						<td>-</td>
+						<td>-</td>
+						<td>-1.11671</td>
+						<td>-1.12532</td>
+						<td>-1.175</td>
+					</tr>	
+					<tr>
+						<td>Be$_2$</td>
+						<td>-</td>
+						<td>-</td>
+						<td>-</td>
+						<td>-28.6988</td>
+						<td>-29.0015</td>
+						<td>-29.3385</td>
+					</tr>
+					<tr>
+						<td>Ne</td>
+						<td>-</td>
+						<td>-127.804</td>
+						<td>-128.356</td>
+						<td>-</td>
+						<td>-</td>
+						<td>-128.9383</td>
+					</tr>
+					<tr>
+						<td>Ar</td>
+						<td>-</td>
+						<td>-524.343</td>
+						<td>-</td>
+						<td>-</td>
+						<td>-</td>
+						<td>-527.544</td>
+					</tr>
+					<tr>
+						<td>H$_2$O</td>
+						<td>-</td>
+						<td>-75.5854</td>
+						<td>-75.9074</td>
+						<td>-</td>
+						<td>-</td>
+						<td>-76.438</td>
+					</tr>
+				</table>
 			</section>
 			<section> 
 				<h2>Equilibrium configurations </h2>
-				<img src="../figures/H2Oconfig_321g.pdf" style="background-color:white;">
+				<img src="../figures/H2Oconfig_321g.png" style="background-color:white;">
 			</section>
 			<section>
 				<h2> One-dimensional approach </h2>
 				<table class="reveal">
-				<td><img src="../figures/H2O_angular_energy.pdf" style="background-color:white;"></td>
-				<td><img src="../figures/H2O_distance_energy.pdf" style="background-color:white;"></td>
+				<td><img src="../figures/H2O_angular_energy.svg" style="background-color:white;"></td>
+				<td><img src="../figures/H2O_distance_energy.svg" style="background-color:white;"></td>
 			</table>
 			</section>
 			<section>
 				<h2> Density plots (1)</h2>
 				<p> Water </p>
 				<table class="reveal">
-					<td><img src="../figures/H2Odensity_321g.pdf" style="background-color:white;"></td>
-					<td><img src="../figures/H2Odensity_431g.pdf" style="background-color:white;"></td>
+					<td><img src="../figures/H2Odensity_321g.png" style="background-color:white;"></td>
+					<td><img src="../figures/H2Odensity_431g.png" style="background-color:white;"></td>
 				</table>
 			</section>
 			<section>
 				<h2> Density plots (2)</h2>
 				<p>  Noble gases </p>
 				<table class="reveal">
-					<td><img src="../figures/Nedensity_321g.pdf" style="background-color:white;"></td>
-					<td><img src="../figures/Ardensity_321g.pdf" style="background-color:white;"></td>
+					<td><img src="../figures/Nedensity_321g.png" style="background-color:white;"></td>
+					<td><img src="../figures/Ardensity_321g.png" style="background-color:white;"></td>
 				</table>
 			</section>
 			<section>
 				<h2> Density plots (3)</h2>
 				<p>  Diatomic molecules </p>
 				<table class="reveal">
-					<td><img src="../figures/H2density_sto3g.pdf" style="background-color:white;"></td>
-					<td><img src="../figures/Be2density_sto3g.pdf" style="background-color:white;"></td>
+					<td><img src="../figures/H2density_sto3g.png" style="background-color:white;"></td>
+					<td><img src="../figures/Be2density_sto3g.png" style="background-color:white;"></td>
 				</table>
 			</section>
 
@@ -131,9 +250,35 @@
 		<section>
 			<section>
 				<h2> Summary </h2>
+				<p> I have developed and tested a Hartree-Fock code.</p>
+				<td style="text-align: left;">
+					<ul>
+						<li>Hartree-Fock reproduces known atomic and molecular features to good precision</li>
+						<li>Convergence is an issue</li>
+						<li>Qualitative properties of the water molecule are reproduced</li>
+						<li>Hard to find benchmark values for silicon dioxide</li>
+						<li>Hartree-Fock has potential for nice figures</li>
+					</ul>
+				</td>
+
 			</section>
 			<section>
 				<h2> Problems for the future </h2>
+								<td style="text-align: left;"><ul>
+					<li>Bigger systems (more efficient and parallell code)</li>
+					<li>Look more systematically at convergence</li>
+				</ul></td>
+			</section>
+			<section>
+				<h2> Use of Hartree-Fock </h2>
+				<td style="text-align: left;"><ul>
+					<li>Post Hartree-fock methods</li>
+					<li>Starting point for DMC/VMC</li>
+				</ul></td>
+			</section>
+			<section>
+				<h2>That's it!</h2>
+				<p>References: same as in my report</p>
 			</section>
 		</section>
 
@@ -145,6 +290,8 @@
         <img alt="Table of Contents" src="../presentable/dist/icons/revealjs.png"/>
     </a>
 </aside>
+
+
 
 <script src="../reveal.js/lib/js/head.min.js"></script>
 <script src="../reveal.js/js/reveal.min.js"></script>
@@ -167,7 +314,6 @@
 				{ src: '../presentable/dist/presentable.min.js', async: true, callback: function() { presentable.toc({framework: "revealjs"}); } }
 			]
 		});
-
 	</script>
 
 
