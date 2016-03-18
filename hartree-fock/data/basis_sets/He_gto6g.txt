@@ -1,0 +1,27 @@
+ v1.2.2 
+
+#  STO-6G  EMSL  Basis Set Exchange Library  6/6/14 5:28 AM
+# Elements                             References
+# --------                             ----------
+# H - Ne:  W.J. Hehre, R.F. Stewart and J.A. Pople, J. Chem. Phys. 51, 2657
+# (1969).
+# Na - Ar:  W.J. Hehre, R. Ditchfield, R.F. Stewart and J.A. Pople,
+# J. Chem. Phys. 52, 2769 (1970).
+# 
+
+
+
+$basis
+*
+he   STO-6G
+*
+    6  s
+     65.98456824             0.00916359628    
+     12.09819836             0.04936149294    
+      3.384639924            0.16853830490    
+      1.162715163            0.37056279970    
+      0.451516322            0.41649152980    
+      0.185959356            0.13033408410    
+*
+$end
+
